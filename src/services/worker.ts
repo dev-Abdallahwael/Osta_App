@@ -1,4 +1,4 @@
-import { setDoc, doc, Timestamp } from 'firebase/firestore';
+import { setDoc, doc, getDoc, Timestamp } from 'firebase/firestore';
 import {
   ref as storageRef,
   uploadBytes,
@@ -52,8 +52,9 @@ export async function submitWorkerProfile(
   if (data.photoUri && storage) {
     try {
       photoURL = await uploadPhoto(uid, data.photoUri);
-    } catch (err) {
-      console.warn('Photo upload failed (storage may be disabled):', err);
+    } catch {
+      // Storage may not be enabled on the free plan; continue without a photo.
+      photoURL = '';
     }
   }
 
@@ -94,4 +95,38 @@ export async function submitWorkerProfile(
   await setDoc(doc(db, 'workers', uid), workerPayload, { merge: true });
 
   return { workerId: uid, photoURL };
+}
+
+export interface WorkerProfile {
+  uid: string;
+  name: string;
+  phone: string;
+  photoURL: string;
+  bio: string;
+  isAvailable: boolean;
+  categories: { categoryId: string; startingPrice: number }[];
+  radiusKm: number;
+  coversWholeCity: boolean;
+}
+
+export async function getWorkerProfile(workerId: string): Promise<WorkerProfile | null> {
+  if (!hasConfig || !db) {
+    return null;
+  }
+  const snap = await getDoc(doc(db, 'workers', workerId));
+  if (!snap.exists()) {
+    return null;
+  }
+  const d = snap.data() as WorkerProfile & Record<string, unknown>;
+  return {
+    uid: d.uid ?? workerId,
+    name: String(d.name ?? ''),
+    phone: String(d.phone ?? ''),
+    photoURL: String(d.photoURL ?? ''),
+    bio: String(d.bio ?? ''),
+    isAvailable: Boolean(d.isAvailable),
+    categories: Array.isArray(d.categories) ? d.categories : [],
+    radiusKm: Number(d.radiusKm ?? 0),
+    coversWholeCity: Boolean(d.coversWholeCity),
+  };
 }
