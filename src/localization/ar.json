@@ -120,6 +120,13 @@
       "comingSoonBody": "ميزة الحفظ ستفعّل في المهمة القادمة"
     }
   },
+  "workerDashboard": {
+    "newWorker": "سعيد بانضمامك!",
+    "live": "ملفك نشط الآن",
+    "profileTitle": "ملفك الشخصي",
+    "profileText": "تم حفظ ملفك وهو متاح للعملاء للتواصل معك.",
+    "services": "عدد الخدمات"
+  },
   "placeholder": {
     "worker": {
       "title": "لوحة العامل",

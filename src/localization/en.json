@@ -120,6 +120,13 @@
       "comingSoonBody": "Saving will be enabled in the next task"
     }
   },
+  "workerDashboard": {
+    "newWorker": "Welcome!",
+    "live": "Your profile is live",
+    "profileTitle": "Your profile",
+    "profileText": "Your profile was saved and is available for customers to reach you.",
+    "services": "Number of services"
+  },
   "placeholder": {
     "worker": {
       "title": "Worker Dashboard",
