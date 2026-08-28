@@ -227,7 +227,18 @@
     "noResults": "No services match your search"
   },
   "categoryWorkers": {
-    "placeholder": "The worker list for this category will appear here soon"
+    "placeholder": "The worker list for this category will appear here soon",
+    "sortDistance": "Nearest",
+    "sortRating": "Rating",
+    "sortPrice": "Price",
+    "available": "available",
+    "featured": "Featured",
+    "noCoverage": "No workers are within your coverage right now. Here are the nearest available:",
+    "error": "Couldn't load the list. Please try again.",
+    "empty": "No workers are available for this category right now.",
+    "currencyPerHour": "EGP/hour",
+    "priceNego": "Price negotiable",
+    "noRating": "No ratings yet"
   },
   "tabs": {
     "home": "Home",
