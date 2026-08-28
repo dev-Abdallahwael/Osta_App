@@ -43,3 +43,8 @@ yarn-error.*
 # project-specific
 tmp-home/
 Microsoft/
+
+# env / secrets
+.env
+.env.*
+!.env.example

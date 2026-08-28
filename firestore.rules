@@ -1,0 +1,49 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function owner(docId) {
+      return signedIn() && request.auth.uid == docId;
+    }
+
+    // Public read of users & workers (needed for browsing), write restricted to owner.
+    match /users/{userId} {
+      allow read: if true;
+      allow create: if signedIn() && request.auth.uid == userId;
+      allow update, delete: if owner(userId);
+    }
+
+    match /workers/{workerId} {
+      allow read: if true;
+      allow create: if signedIn() && request.auth.uid == workerId;
+      allow update: if owner(workerId);
+      allow delete: if owner(workerId);
+    }
+
+    // Worker reviews: public read, write by the signed-in reviewer.
+    match /workers/{workerId}/reviews/{reviewId} {
+      allow read: if true;
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+    }
+
+    // Chats: restricted to participants.
+    match /chats/{chatId} {
+      allow read, update: if signedIn() && request.auth.uid in resource.data.participantIds;
+      allow create: if signedIn() && request.auth.uid in request.resource.data.participantIds;
+      match /messages/{messageId} {
+        allow read: if signedIn() && request.auth.uid in resource.data.participantIds;
+        allow create: if signedIn() && get(/databases/$(database)/documents/chats/$(chatId)).data.participantIds.hasAny([request.auth.uid]);
+      }
+    }
+
+    // Reports: public write, owner read.
+    match /reports/{reportId} {
+      allow create: if signedIn();
+      allow read: if owner(reportId);
+    }
+  }
+}
