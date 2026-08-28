@@ -218,5 +218,15 @@
       "submitErrorTitle": "Couldn't save",
       "submitErrorBody": "Something went wrong while saving your details. Try again."
     }
+  },
+  "userHome": {
+    "greeting": "Welcome to",
+    "title": "Osta Services",
+    "switchAccount": "Switch account",
+    "searchPlaceholder": "Search for a service like plumber, electrician...",
+    "noResults": "No services match your search"
+  },
+  "categoryWorkers": {
+    "placeholder": "The worker list for this category will appear here soon"
   }
 }

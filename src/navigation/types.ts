@@ -24,6 +24,7 @@ export type WorkerOnboardingParamList = {
 
 export type UserStackParamList = {
   UserHome: undefined;
+  CategoryWorkers: { categoryId: string };
 };
 
 export type UserOnboardingParamList = {

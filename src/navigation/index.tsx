@@ -5,7 +5,8 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useApp } from '../context/AppContext';
 import RoleSelectScreen from '../screens/RoleSelectScreen';
 import LoginScreen from '../screens/LoginScreen';
-import PlaceholderHomeScreen from '../screens/PlaceholderHomeScreen';
+import UserHomeScreen from '../screens/user/UserHomeScreen';
+import CategoryWorkersScreen from '../screens/user/CategoryWorkersScreen';
 import WorkerDashboardScreen from '../screens/worker/WorkerDashboardScreen';
 import WorkerOnboardingNavigator from './WorkerOnboardingNavigator';
 import UserOnboardingNavigator from './UserOnboardingNavigator';
@@ -15,9 +16,6 @@ const RootStack = createNativeStackNavigator<RootStackParamList>();
 const WorkerStack = createNativeStackNavigator<WorkerStackParamList>();
 const UserStack = createNativeStackNavigator<UserStackParamList>();
 
-function UserHomeScreen() {
-  return <PlaceholderHomeScreen role="user" />;
-}
 function WorkerHome() {
   const { workerOnboarded } = useApp();
   return (
@@ -53,6 +51,11 @@ function UserHome() {
         name="UserHome"
         component={userOnboarded ? UserHomeScreen : UserOnboardingNavigator}
         options={{ headerShown: false }}
+      />
+      <UserStack.Screen
+        name="CategoryWorkers"
+        component={CategoryWorkersScreen}
+        options={{ headerShown: true, title: '' }}
       />
     </UserStack.Navigator>
   );

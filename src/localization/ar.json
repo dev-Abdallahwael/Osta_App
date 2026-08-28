@@ -218,5 +218,15 @@
       "submitErrorTitle": "تعذر الحفظ",
       "submitErrorBody": "حدث خطأ أثناء حفظ بياناتك. حاول مرة أخرى."
     }
+  },
+  "userHome": {
+    "greeting": "أهلاً بك في",
+    "title": "خدمات أوستا",
+    "switchAccount": "تغيير الحساب",
+    "searchPlaceholder": "ابحث عن خدمة مثل سباك، كهربائي...",
+    "noResults": "لا توجد خدمات مطابقة لبحثك"
+  },
+  "categoryWorkers": {
+    "placeholder": "قائمة العاملين لهذه الفئة ستظهر هنا قريباً"
   }
 }
