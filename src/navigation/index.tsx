@@ -12,15 +12,19 @@ const RootStack = createNativeStackNavigator<RootStackParamList>();
 const WorkerStack = createNativeStackNavigator<WorkerStackParamList>();
 const UserStack = createNativeStackNavigator<UserStackParamList>();
 
+function WorkerHomeScreen() {
+  return <PlaceholderHomeScreen role="worker" />;
+}
 function UserHomeScreen() {
   return <PlaceholderHomeScreen role="user" />;
 }
 function WorkerHome() {
+  const { workerOnboarded } = useApp();
   return (
     <WorkerStack.Navigator>
       <WorkerStack.Screen
         name="WorkerHome"
-        component={WorkerOnboardingNavigator}
+        component={workerOnboarded ? WorkerHomeScreen : WorkerOnboardingNavigator}
         options={{ headerShown: false }}
       />
     </WorkerStack.Navigator>

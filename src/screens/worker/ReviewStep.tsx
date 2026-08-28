@@ -1,14 +1,19 @@
-import React from 'react';
-import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../context/ThemeContext';
 import { useWorkerOnboarding } from '../../context/WorkerOnboardingContext';
+import { useApp } from '../../context/AppContext';
+import { submitWorkerProfile } from '../../services/worker';
+import UserAvatar from '../../components/UserAvatar';
 import OnboardingLayout, { StepHeader } from '../../components/OnboardingLayout';
 
 export default function ReviewStep() {
   const { t } = useTranslation();
   const { colors } = useTheme();
-  const { data } = useWorkerOnboarding();
+  const { data, reset } = useWorkerOnboarding();
+  const { markWorkerOnboarded } = useApp();
+  const [saving, setSaving] = useState(false);
 
   function to12h(value: string): string {
     const [hh, mm] = value.split(':').map(Number);
@@ -23,18 +28,43 @@ export default function ReviewStep() {
     );
   }
 
+  async function handleFinish() {
+    if (saving) return;
+    setSaving(true);
+    try {
+      await submitWorkerProfile(data);
+      reset();
+      await markWorkerOnboarded();
+    } catch (err) {
+      console.warn('Submit failed:', err);
+      Alert.alert(
+        t('workerOnboarding.review.submitErrorTitle'),
+        t('workerOnboarding.review.submitErrorBody'),
+        [{ text: t('workerOnboarding.review.retry'), onPress: () => handleFinish() }],
+      );
+    } finally {
+      setSaving(false);
+    }
+  }
+
   return (
-    <OnboardingLayout step={7} total={7} scroll={false}>
+    <OnboardingLayout step={7} total={7} scroll={false} onFinish={handleFinish} canContinue={!saving}>
       <StepHeader
         title={t('workerOnboarding.review.title')}
         hint={t('workerOnboarding.review.hint')}
       />
+      {saving && (
+        <View style={styles.savingBar}>
+          <ActivityIndicator color={colors.accent} />
+          <Text style={[styles.savingText, { color: colors.textSecondary }]}>
+            {t('workerOnboarding.review.saving')}
+          </Text>
+        </View>
+      )}
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-        {data.photoUri && (
-          <View style={styles.photoWrap}>
-            <Image source={{ uri: data.photoUri }} style={styles.photo} />
-          </View>
-        )}
+        <View style={styles.photoWrap}>
+          <UserAvatar uri={data.photoUri} size={96} />
+        </View>
 
         <Row label={t('workerOnboarding.review.name')}>{data.name}</Row>
         <Row label={t('workerOnboarding.review.phone')}>{data.phone}</Row>
@@ -121,10 +151,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 16,
   },
-  photo: {
-    width: 96,
-    height: 96,
-    borderRadius: 48,
+  savingBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingVertical: 6,
+    marginBottom: 8,
+  },
+  savingText: {
+    fontSize: 14,
   },
   row: {
     flexDirection: 'row',

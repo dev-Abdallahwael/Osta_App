@@ -111,7 +111,11 @@
       "location": "Location",
       "radius": "Coverage radius",
       "hours": "Working hours",
-      "note": "Saving will be enabled soon",
+      "note": "After saving, your profile will be live for customers",
+      "saving": "Saving...",
+      "submitErrorTitle": "Save failed",
+      "submitErrorBody": "Something went wrong saving your profile. Your data is kept — please try again.",
+      "retry": "Retry",
       "comingSoonTitle": "Coming soon",
       "comingSoonBody": "Saving will be enabled in the next task"
     }
