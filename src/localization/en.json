@@ -20,6 +20,29 @@
       "hint": "The fixed category list (localized by language)."
     }
   },
+  "roleSelect": {
+    "title": "How would you like to continue?",
+    "subtitle": "Choose what fits you to get started",
+    "user": {
+      "title": "I need help",
+      "subtitle": "Find a worker or technician"
+    },
+    "worker": {
+      "title": "I offer a service",
+      "subtitle": "I am a worker or technician"
+    }
+  },
+  "placeholder": {
+    "worker": {
+      "title": "Worker Dashboard",
+      "subtitle": "Chats and stats will appear here"
+    },
+    "user": {
+      "title": "Home",
+      "subtitle": "Categories and search will appear here"
+    },
+    "switchRole": "Switch account"
+  },
   "categories": {
     "electrician": { "name": "Electrician" },
     "plumber": { "name": "Plumber" },

@@ -2,6 +2,7 @@ export type Role = 'worker' | 'user';
 
 export type RootStackParamList = {
   RoleSelect: undefined;
+  Login: undefined;
   WorkerStack: undefined;
   UserStack: undefined;
 };
