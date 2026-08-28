@@ -2,6 +2,10 @@
   "app": {
     "name": "Osta"
   },
+  "theme": {
+    "dark": "🌙 Dark",
+    "light": "☀️ Light"
+  },
   "language": {
     "aria": "Language",
     "test": {

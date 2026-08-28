@@ -2,6 +2,10 @@
   "app": {
     "name": "أوستا"
   },
+  "theme": {
+    "dark": "🌙 داكن",
+    "light": "☀️ فاتح"
+  },
   "language": {
     "aria": "اللغة",
     "test": {

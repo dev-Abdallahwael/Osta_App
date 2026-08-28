@@ -3,15 +3,17 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import { ensureAnonymousSignIn } from './src/services/auth';
 import { LanguageProvider, useLanguage } from './src/context/LanguageContext';
-import LanguageTestScreen from './src/screens/LanguageTestScreen';
+import { ThemeProvider, useTheme } from './src/context/ThemeContext';
+import TestScreen from './src/screens/TestScreen';
 
 function Root() {
   const { renderKey } = useLanguage();
+  const { colors } = useTheme();
 
   return (
-    <View style={styles.container} key={renderKey}>
+    <View style={[styles.container, { backgroundColor: colors.background }]} key={renderKey}>
       <StatusBar style="auto" />
-      <LanguageTestScreen />
+      <TestScreen />
     </View>
   );
 }
@@ -23,7 +25,9 @@ export default function App() {
 
   return (
     <LanguageProvider>
-      <Root />
+      <ThemeProvider>
+        <Root />
+      </ThemeProvider>
     </LanguageProvider>
   );
 }

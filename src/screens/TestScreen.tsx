@@ -1,34 +1,50 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from '../context/ThemeContext';
 import LanguageToggle from '../components/LanguageToggle';
+import ThemeToggle from '../components/ThemeToggle';
 
-export default function LanguageTestScreen() {
+export default function TestScreen() {
   const { t } = useTranslation();
+  const { colors } = useTheme();
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{t('language.test.title')}</Text>
-      <Text style={styles.subtitle}>{t('language.test.subtitle')}</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Text style={[styles.title, { color: colors.textPrimary }]}>
+        {t('language.test.title')}
+      </Text>
+      <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+        {t('language.test.subtitle')}
+      </Text>
 
-      <Text style={styles.intro}>{t('language.test.rowIntro')}</Text>
+      <Text style={[styles.intro, { color: colors.textSecondary }]}>
+        {t('language.test.rowIntro')}
+      </Text>
 
       <View style={styles.row}>
-        <View style={[styles.box, styles.boxLeft]}>
+        <View style={[styles.box, { backgroundColor: colors.accent }]}>
           <Text style={styles.boxText}>{t('language.test.rowA')}</Text>
         </View>
-        <View style={[styles.box, styles.boxRight]}>
+        <View style={[styles.box, { backgroundColor: colors.success }]}>
           <Text style={styles.boxText}>{t('language.test.rowB')}</Text>
         </View>
       </View>
 
-      <Text style={styles.description}>{t('language.test.description')}</Text>
+      <Text style={[styles.description, { color: colors.textSecondary }]}>
+        {t('language.test.description')}
+      </Text>
 
       <View style={styles.toggleContainer}>
-        <LanguageToggle />
-        <Text style={styles.toggleCaption}>
-          {t('language.test.arabic')} | {t('language.test.english')}
-        </Text>
+        <LanguageToggle
+          activeColor={colors.accent}
+          inactiveColor="transparent"
+          textColor={colors.textSecondary}
+          activeTextColor="#ffffff"
+          containerColor={colors.surface}
+        />
+        <View style={styles.spacer} />
+        <ThemeToggle />
       </View>
     </View>
   );
@@ -37,7 +53,6 @@ export default function LanguageTestScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 24,
@@ -45,18 +60,15 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#0f172a',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#475569',
     marginBottom: 24,
     textAlign: 'center',
   },
   intro: {
     fontSize: 14,
-    color: '#64748b',
     marginBottom: 12,
     textAlign: 'center',
   },
@@ -72,30 +84,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: 6,
   },
-  boxLeft: {
-    backgroundColor: '#2563eb',
-  },
-  boxRight: {
-    backgroundColor: '#059669',
-  },
   boxText: {
-    color: '#fff',
+    color: '#ffffff',
     fontSize: 14,
     fontWeight: '600',
   },
   description: {
     fontSize: 14,
-    color: '#475569',
     marginBottom: 24,
     textAlign: 'center',
   },
   toggleContainer: {
     marginTop: 8,
   },
-  toggleCaption: {
-    marginTop: 12,
-    textAlign: 'center',
-    fontSize: 13,
-    color: '#94a3b8',
+  spacer: {
+    height: 16,
   },
 });
