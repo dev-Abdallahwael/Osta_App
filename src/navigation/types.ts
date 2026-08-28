@@ -11,6 +11,16 @@ export type WorkerStackParamList = {
   WorkerHome: undefined;
 };
 
+export type WorkerOnboardingParamList = {
+  PhoneStep: undefined;
+  PersonalStep: undefined;
+  CategoriesStep: undefined;
+  PriceStep: undefined;
+  LocationStep: undefined;
+  HoursStep: undefined;
+  ReviewStep: undefined;
+};
+
 export type UserStackParamList = {
   UserHome: undefined;
 };

@@ -42,6 +42,72 @@
     "errorEmpty": "Please enter email and password",
     "errorInvalid": "Invalid email or password"
   },
+  "workerOnboarding": {
+    "step": "Step",
+    "of": "of",
+    "continue": "Continue",
+    "optional": "(optional)",
+    "phone": {
+      "title": "Your phone number",
+      "hint": "Customers will reach you on this number",
+      "placeholder": "05xxxxxxxx"
+    },
+    "personal": {
+      "title": "Your details",
+      "nameHint": "Full name shown to customers",
+      "namePlaceholder": "Enter your full name",
+      "addPhoto": "Add photo",
+      "bioLabel": "About you",
+      "bioPlaceholder": "e.g. 10 years of experience in this field..."
+    },
+    "categories": {
+      "title": "Choose your services",
+      "hint": "Select all the services you offer"
+    },
+    "price": {
+      "title": "Your service prices",
+      "hint": "Set a starting price for each service you picked",
+      "from": "From",
+      "currency": "SAR"
+    },
+    "location": {
+      "title": "Work area",
+      "hint": "Set the area where you work",
+      "autoDetect": "Detect my location",
+      "orManual": "Or enter the address manually",
+      "addressPlaceholder": "Enter the area address",
+      "radius": "Coverage radius"
+    },
+    "days": {
+      "sat": "Saturday",
+      "sun": "Sunday",
+      "mon": "Monday",
+      "tue": "Tuesday",
+      "wed": "Wednesday",
+      "thu": "Thursday",
+      "fri": "Friday"
+    },
+    "hours": {
+      "title": "Working hours",
+      "hint": "Set the days and times you are available",
+      "from": "From",
+      "to": "To",
+      "add": "Enable",
+      "remove": "Disable"
+    },
+    "review": {
+      "title": "Review your request",
+      "hint": "Check your details before saving",
+      "name": "Name",
+      "phone": "Phone",
+      "bio": "About",
+      "services": "Services",
+      "location": "Location",
+      "radius": "Coverage radius",
+      "hours": "Working hours",
+      "note": "Saving will be enabled soon"
+    }
+  },
   "placeholder": {
     "worker": {
       "title": "Worker Dashboard",

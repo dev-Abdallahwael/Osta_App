@@ -5,26 +5,22 @@ import { useApp } from '../context/AppContext';
 import RoleSelectScreen from '../screens/RoleSelectScreen';
 import LoginScreen from '../screens/LoginScreen';
 import PlaceholderHomeScreen from '../screens/PlaceholderHomeScreen';
+import WorkerOnboardingNavigator from './WorkerOnboardingNavigator';
 import type { RootStackParamList, WorkerStackParamList, UserStackParamList } from './types';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const WorkerStack = createNativeStackNavigator<WorkerStackParamList>();
 const UserStack = createNativeStackNavigator<UserStackParamList>();
 
-function WorkerHomeScreen() {
-  return <PlaceholderHomeScreen role="worker" />;
-}
-
 function UserHomeScreen() {
   return <PlaceholderHomeScreen role="user" />;
 }
-
 function WorkerHome() {
   return (
     <WorkerStack.Navigator>
       <WorkerStack.Screen
         name="WorkerHome"
-        component={WorkerHomeScreen}
+        component={WorkerOnboardingNavigator}
         options={{ headerShown: false }}
       />
     </WorkerStack.Navigator>
