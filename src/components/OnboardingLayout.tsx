@@ -54,7 +54,7 @@ export default function OnboardingLayout({
     if (navigation.canGoBack()) {
       navigation.goBack();
     } else if (edit) {
-      navigation.getParent()?.navigate('WorkerHome' as never);
+      navigation.navigate('Main' as never);
     } else {
       (navigation as Nav as { navigate: (s: string) => void }).navigate('RoleSelect');
     }

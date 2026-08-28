@@ -228,5 +228,17 @@
   },
   "categoryWorkers": {
     "placeholder": "قائمة العاملين لهذه الفئة ستظهر هنا قريباً"
-  }
+  },
+  "tabs": {
+    "home": "الرئيسية",
+    "profile": "الملف",
+    "settings": "الإعدادات"
+  },
+  "profile": {
+    "title": "ملفك الشخصي",
+    "anonymous": "مستخدم",
+    "roleWorker": "مقدّم خدمة",
+    "roleUser": "طالب خدمة"
+  },
+  "switchAccount": "تغيير الحساب"
 }

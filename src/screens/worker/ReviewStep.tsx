@@ -37,7 +37,7 @@ export default function ReviewStep() {
       await submitWorkerProfile(data, edit);
       reset();
       if (edit) {
-        navigation.getParent()?.navigate('WorkerHome' as never);
+        navigation.navigate('Main' as never);
       } else {
         await markWorkerOnboarded();
       }

@@ -1,15 +1,24 @@
+import type { NavigatorScreenParams } from '@react-navigation/native';
+
 export type Role = 'worker' | 'user';
 
 export type RootStackParamList = {
   RoleSelect: undefined;
   Login: undefined;
-  WorkerStack: undefined;
-  UserStack: undefined;
+  Main: NavigatorScreenParams<MainTabParamList> | undefined;
+  WorkerOnboarding: { edit?: boolean } | undefined;
+  UserOnboarding: undefined;
 };
 
-export type WorkerStackParamList = {
-  WorkerHome: undefined;
-  WorkerOnboarding: { edit?: boolean } | undefined;
+export type MainTabParamList = {
+  Home: NavigatorScreenParams<HomeStackParamList> | undefined;
+  Profile: undefined;
+  Settings: undefined;
+};
+
+export type HomeStackParamList = {
+  HomeScreen: undefined;
+  CategoryWorkers: { categoryId: string };
 };
 
 export type WorkerOnboardingParamList = {
@@ -20,11 +29,6 @@ export type WorkerOnboardingParamList = {
   LocationStep: undefined;
   HoursStep: undefined;
   ReviewStep: undefined;
-};
-
-export type UserStackParamList = {
-  UserHome: undefined;
-  CategoryWorkers: { categoryId: string };
 };
 
 export type UserOnboardingParamList = {

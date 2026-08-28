@@ -228,5 +228,17 @@
   },
   "categoryWorkers": {
     "placeholder": "The worker list for this category will appear here soon"
-  }
+  },
+  "tabs": {
+    "home": "Home",
+    "profile": "Profile",
+    "settings": "Settings"
+  },
+  "profile": {
+    "title": "Your profile",
+    "anonymous": "User",
+    "roleWorker": "Service provider",
+    "roleUser": "Service seeker"
+  },
+  "switchAccount": "Switch account"
 }

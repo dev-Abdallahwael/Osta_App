@@ -20,13 +20,13 @@ import {
   setWorkerAvailability,
   type WorkerProfile,
 } from '../../services/worker';
-import type { WorkerStackParamList } from '../../navigation/types';
+import type { RootStackParamList } from '../../navigation/types';
 import UserAvatar from '../../components/UserAvatar';
 
 export default function WorkerDashboardScreen() {
   const { t } = useTranslation();
   const { colors } = useTheme();
-  const navigation = useNavigation<NativeStackNavigationProp<WorkerStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { clearRole, markWorkerOnboarded } = useApp();
   const [profile, setProfile] = useState<WorkerProfile | null>(null);
   const [loading, setLoading] = useState(true);

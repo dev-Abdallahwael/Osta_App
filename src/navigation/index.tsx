@@ -5,70 +5,32 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useApp } from '../context/AppContext';
 import RoleSelectScreen from '../screens/RoleSelectScreen';
 import LoginScreen from '../screens/LoginScreen';
-import UserHomeScreen from '../screens/user/UserHomeScreen';
-import CategoryWorkersScreen from '../screens/user/CategoryWorkersScreen';
-import WorkerDashboardScreen from '../screens/worker/WorkerDashboardScreen';
+import MainTabs from './MainTabs';
 import WorkerOnboardingNavigator from './WorkerOnboardingNavigator';
 import UserOnboardingNavigator from './UserOnboardingNavigator';
-import type { RootStackParamList, WorkerStackParamList, UserStackParamList } from './types';
+import type { RootStackParamList } from './types';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
-const WorkerStack = createNativeStackNavigator<WorkerStackParamList>();
-const UserStack = createNativeStackNavigator<UserStackParamList>();
 
-function WorkerHome() {
-  const { workerOnboarded } = useApp();
-  return (
-    <WorkerStack.Navigator>
-      <WorkerStack.Screen
-        name="WorkerHome"
-        component={workerOnboarded ? WorkerDashboardScreen : WorkerOnboardingNavigator}
-        options={{ headerShown: false }}
-      />
-      <WorkerStack.Screen
-        name="WorkerOnboarding"
-        component={EditOnboardingRoute}
-        options={{ headerShown: false }}
-      />
-    </WorkerStack.Navigator>
-  );
-}
-
-type EditOnboardingRouteProps = NativeStackScreenProps<
-  WorkerStackParamList,
+type WorkerOnboardingProps = NativeStackScreenProps<
+  RootStackParamList,
   'WorkerOnboarding'
 >;
 
-function EditOnboardingRoute({ route }: EditOnboardingRouteProps) {
-  return <WorkerOnboardingNavigator edit={route?.params?.edit ?? true} />;
+function WorkerOnboardingRoute({ route }: WorkerOnboardingProps) {
+  return <WorkerOnboardingNavigator edit={route?.params?.edit ?? false} />;
 }
 
-function UserHome() {
-  const { userOnboarded } = useApp();
-  return (
-    <UserStack.Navigator>
-      <UserStack.Screen
-        name="UserHome"
-        component={userOnboarded ? UserHomeScreen : UserOnboardingNavigator}
-        options={{ headerShown: false }}
-      />
-      <UserStack.Screen
-        name="CategoryWorkers"
-        component={CategoryWorkersScreen}
-        options={{ headerShown: true, title: '' }}
-      />
-    </UserStack.Navigator>
-  );
+function targetRoute(role: 'worker' | 'user' | null, workerOnboarded: boolean, userOnboarded: boolean) {
+  if (!role) return 'RoleSelect';
+  if (role === 'worker' && !workerOnboarded) return 'WorkerOnboarding';
+  if (role === 'user' && !userOnboarded) return 'UserOnboarding';
+  return 'Main';
 }
 
 export default function AppNavigator() {
-  const { role, isBooting } = useApp();
-
-  function initialRoute(): 'RoleSelect' | 'WorkerStack' | 'UserStack' {
-    if (role === 'worker') return 'WorkerStack';
-    if (role === 'user') return 'UserStack';
-    return 'RoleSelect';
-  }
+  const { role, workerOnboarded, userOnboarded, isBooting } = useApp();
+  const initial = targetRoute(role, workerOnboarded, userOnboarded);
 
   if (isBooting) {
     return null;
@@ -76,7 +38,7 @@ export default function AppNavigator() {
 
   return (
     <NavigationContainer>
-      <RootStack.Navigator initialRouteName={initialRoute()}>
+      <RootStack.Navigator key={initial} initialRouteName={initial}>
         <RootStack.Screen
           name="RoleSelect"
           component={RoleSelectScreen}
@@ -87,14 +49,15 @@ export default function AppNavigator() {
           component={LoginScreen}
           options={{ headerShown: false }}
         />
+        <RootStack.Screen name="Main" component={MainTabs} options={{ headerShown: false }} />
         <RootStack.Screen
-          name="WorkerStack"
-          component={WorkerHome}
+          name="WorkerOnboarding"
+          component={WorkerOnboardingRoute}
           options={{ headerShown: false }}
         />
         <RootStack.Screen
-          name="UserStack"
-          component={UserHome}
+          name="UserOnboarding"
+          component={UserOnboardingNavigator}
           options={{ headerShown: false }}
         />
       </RootStack.Navigator>

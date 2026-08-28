@@ -14,12 +14,12 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTheme } from '../../context/ThemeContext';
 import { useApp } from '../../context/AppContext';
 import { CATEGORIES } from '../../data/categories';
-import type { UserStackParamList } from '../../navigation/types';
+import type { HomeStackParamList } from '../../navigation/types';
 
 export default function UserHomeScreen() {
   const { t } = useTranslation();
   const { colors } = useTheme();
-  const navigation = useNavigation<NativeStackNavigationProp<UserStackParamList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
   const { clearRole } = useApp();
   const [query, setQuery] = useState('');
 

@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '../../context/ThemeContext';
 import { CATEGORIES } from '../../data/categories';
-import type { UserStackParamList } from '../../navigation/types';
+import type { HomeStackParamList } from '../../navigation/types';
 
-type Props = NativeStackScreenProps<UserStackParamList, 'CategoryWorkers'>;
+type Props = NativeStackScreenProps<HomeStackParamList, 'CategoryWorkers'>;
 
 export default function CategoryWorkersScreen({ route }: Props) {
   const { t } = useTranslation();
