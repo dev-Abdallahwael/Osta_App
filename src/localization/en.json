@@ -208,13 +208,13 @@
       "namePlaceholder": "Enter your name",
       "locationLabel": "Your location",
       "detectLocation": "📍 Detect my location automatically",
-      "detectHint": "Allow location access (optional)",
+      "detectHint": "Allow location access so we can find services near you",
       "locationNearby": "Nearby location",
       "locationAddress": "Location saved",
-      "locationDeniedTitle": "Access denied",
-      "locationDeniedBody": "You didn't grant location access. You can continue without it.",
+      "locationDeniedTitle": "Location access is required",
+      "locationDeniedBody": "We need your location to find services near you. Please allow location access to continue.",
       "locationErrorTitle": "Couldn't detect location",
-      "locationErrorBody": "Something went wrong while detecting your location. Try again later.",
+      "locationErrorBody": "Something went wrong while detecting your location. Please try again.",
       "submitErrorTitle": "Couldn't save",
       "submitErrorBody": "Something went wrong while saving your details. Try again."
     }

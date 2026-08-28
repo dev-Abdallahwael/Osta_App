@@ -208,13 +208,13 @@
       "namePlaceholder": "اكتب اسمك",
       "locationLabel": "موقعك",
       "detectLocation": "📍 كشف موقعي تلقائياً",
-      "detectHint": "السماح بالوصول لموقعك (اختياري)",
+      "detectHint": "السماح بالوصول للموقع حتى نجد الخدمات القريبة منك",
       "locationNearby": "موقع قريب",
       "locationAddress": "تم حفظ موقعك",
-      "locationDeniedTitle": "الوصول مرفوض",
-      "locationDeniedBody": "لم تمنح إذن الوصول للموقع. يمكنك المتابعة بدونه.",
+      "locationDeniedTitle": "الوصول للموقع مطلوب",
+      "locationDeniedBody": "نحتاج موقعك لإيجاد الخدمات القريبة منك. يرجى السماح بالوصول للموقع للمتابعة.",
       "locationErrorTitle": "تعذر كشف الموقع",
-      "locationErrorBody": "حدث خطأ أثناء محاولة كشف موقعك، يرجى المحاولة لاحقاً.",
+      "locationErrorBody": "حدث خطأ أثناء محاولة كشف موقعك، يرجى المحاولة مرة أخرى.",
       "submitErrorTitle": "تعذر الحفظ",
       "submitErrorBody": "حدث خطأ أثناء حفظ بياناتك. حاول مرة أخرى."
     }

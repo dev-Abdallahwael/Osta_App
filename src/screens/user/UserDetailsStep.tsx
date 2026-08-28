@@ -89,7 +89,7 @@ export default function UserDetailsStep() {
     <UserOnboardingLayout
       step={2}
       total={2}
-      canContinue={data.name.trim().length > 0}
+      canContinue={data.name.trim().length > 0 && !!data.location}
       onFinish={handleFinish}
     >
       <Text style={[styles.title, { color: colors.textPrimary }]}>
