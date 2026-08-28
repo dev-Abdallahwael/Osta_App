@@ -29,6 +29,7 @@ function toDateCompat(): object {
 
 export async function submitWorkerProfile(
   data: WorkerOnboardingData,
+  edit = false,
 ): Promise<SubmitWorkerResult> {
   if (!hasConfig || !db) {
     throw new Error('Firebase not configured');
@@ -66,7 +67,7 @@ export async function submitWorkerProfile(
     };
   }
 
-  const workerPayload = {
+  const workerPayload: Record<string, unknown> = {
     uid,
     name: data.name,
     phone: '+20' + data.phone,
@@ -84,13 +85,16 @@ export async function submitWorkerProfile(
     radiusKm: data.coverWholeCity ? 0 : data.radiusKm,
     coversWholeCity: data.coverWholeCity,
     availableHours,
-    isAvailable: true,
-    isFeatured: false,
-    featuredUntil: null,
-    ratingAvg: 0,
-    ratingCount: 0,
-    createdAt: toDateCompat(),
   };
+
+  if (!edit) {
+    workerPayload.isAvailable = true;
+    workerPayload.isFeatured = false;
+    workerPayload.featuredUntil = null;
+    workerPayload.ratingAvg = 0;
+    workerPayload.ratingCount = 0;
+    workerPayload.createdAt = toDateCompat();
+  }
 
   await setDoc(doc(db, 'workers', uid), workerPayload, { merge: true });
 
@@ -107,6 +111,8 @@ export interface WorkerProfile {
   categories: { categoryId: string; startingPrice: number }[];
   radiusKm: number;
   coversWholeCity: boolean;
+  location: { lat: number; lng: number; city: string; address: string } | null;
+  availableHours: Record<string, { start: string; end: string }>;
 }
 
 export async function setWorkerAvailability(
@@ -132,6 +138,13 @@ export async function getWorkerProfile(workerId: string): Promise<WorkerProfile 
     return null;
   }
   const d = snap.data() as WorkerProfile & Record<string, unknown>;
+  const rawLocation = (d.location ?? null) as
+    | { lat: number; lng: number; city: string; address: string }
+    | null;
+  const rawHours = (d.availableHours ?? {}) as Record<
+    string,
+    { start: string; end: string }
+  >;
   return {
     uid: d.uid ?? workerId,
     name: String(d.name ?? ''),
@@ -142,5 +155,14 @@ export async function getWorkerProfile(workerId: string): Promise<WorkerProfile 
     categories: Array.isArray(d.categories) ? d.categories : [],
     radiusKm: Number(d.radiusKm ?? 0),
     coversWholeCity: Boolean(d.coversWholeCity),
+    location: rawLocation
+      ? {
+          lat: Number(rawLocation.lat ?? 0),
+          lng: Number(rawLocation.lng ?? 0),
+          city: String(rawLocation.city ?? ''),
+          address: String(rawLocation.address ?? ''),
+        }
+      : null,
+    availableHours: rawHours,
   };
 }

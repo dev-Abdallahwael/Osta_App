@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../context/ThemeContext';
+import { useWorkerOnboarding } from '../context/WorkerOnboardingContext';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { WorkerOnboardingParamList } from '../navigation/types';
@@ -47,10 +48,13 @@ export default function OnboardingLayout({
   const { t } = useTranslation();
   const { colors } = useTheme();
   const navigation = useNavigation<Nav>();
+  const { edit } = useWorkerOnboarding();
 
   function handleBack() {
     if (navigation.canGoBack()) {
       navigation.goBack();
+    } else if (edit) {
+      navigation.getParent()?.navigate('WorkerHome' as never);
     } else {
       (navigation as Nav as { navigate: (s: string) => void }).navigate('RoleSelect');
     }

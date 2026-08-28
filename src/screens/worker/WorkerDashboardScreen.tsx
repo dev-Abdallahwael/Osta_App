@@ -10,6 +10,8 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTheme } from '../../context/ThemeContext';
 import { useApp } from '../../context/AppContext';
 import { getCurrentUserId } from '../../services/auth';
@@ -18,11 +20,13 @@ import {
   setWorkerAvailability,
   type WorkerProfile,
 } from '../../services/worker';
+import type { WorkerStackParamList } from '../../navigation/types';
 import UserAvatar from '../../components/UserAvatar';
 
 export default function WorkerDashboardScreen() {
   const { t } = useTranslation();
   const { colors } = useTheme();
+  const navigation = useNavigation<NativeStackNavigationProp<WorkerStackParamList>>();
   const { clearRole, markWorkerOnboarded } = useApp();
   const [profile, setProfile] = useState<WorkerProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -170,7 +174,7 @@ export default function WorkerDashboardScreen() {
       <View style={styles.actions}>
         <Pressable
           style={[styles.actionBtn, { backgroundColor: colors.accent }]}
-          onPress={() => Alert.alert(t('workerDashboard.comingSoonTitle'), t('workerDashboard.editComingSoon'))}
+          onPress={() => navigation.navigate('WorkerOnboarding', { edit: true })}
         >
           <Text style={styles.actionText}>{t('workerDashboard.editProfile')}</Text>
         </Pressable>

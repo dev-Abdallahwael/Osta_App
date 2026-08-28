@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useApp } from '../context/AppContext';
 import RoleSelectScreen from '../screens/RoleSelectScreen';
 import LoginScreen from '../screens/LoginScreen';
@@ -25,8 +26,22 @@ function WorkerHome() {
         component={workerOnboarded ? WorkerDashboardScreen : WorkerOnboardingNavigator}
         options={{ headerShown: false }}
       />
+      <WorkerStack.Screen
+        name="WorkerOnboarding"
+        component={EditOnboardingRoute}
+        options={{ headerShown: false }}
+      />
     </WorkerStack.Navigator>
   );
+}
+
+type EditOnboardingRouteProps = NativeStackScreenProps<
+  WorkerStackParamList,
+  'WorkerOnboarding'
+>;
+
+function EditOnboardingRoute({ route }: EditOnboardingRouteProps) {
+  return <WorkerOnboardingNavigator edit={route?.params?.edit ?? true} />;
 }
 
 function UserHome() {

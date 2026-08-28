@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../../context/ThemeContext';
 import { useWorkerOnboarding } from '../../context/WorkerOnboardingContext';
 import { useApp } from '../../context/AppContext';
@@ -11,7 +12,8 @@ import OnboardingLayout, { StepHeader } from '../../components/OnboardingLayout'
 export default function ReviewStep() {
   const { t } = useTranslation();
   const { colors } = useTheme();
-  const { data, reset } = useWorkerOnboarding();
+  const navigation = useNavigation();
+  const { data, reset, edit } = useWorkerOnboarding();
   const { markWorkerOnboarded } = useApp();
   const [saving, setSaving] = useState(false);
 
@@ -32,9 +34,13 @@ export default function ReviewStep() {
     if (saving) return;
     setSaving(true);
     try {
-      await submitWorkerProfile(data);
+      await submitWorkerProfile(data, edit);
       reset();
-      await markWorkerOnboarded();
+      if (edit) {
+        navigation.getParent()?.navigate('WorkerHome' as never);
+      } else {
+        await markWorkerOnboarded();
+      }
     } catch (err) {
       console.warn('Submit failed:', err);
       Alert.alert(
@@ -50,8 +56,8 @@ export default function ReviewStep() {
   return (
     <OnboardingLayout step={7} total={7} scroll={false} onFinish={handleFinish} canContinue={!saving}>
       <StepHeader
-        title={t('workerOnboarding.review.title')}
-        hint={t('workerOnboarding.review.hint')}
+        title={edit ? t('workerOnboarding.review.editTitle') : t('workerOnboarding.review.title')}
+        hint={edit ? t('workerOnboarding.review.editHint') : t('workerOnboarding.review.hint')}
       />
       {saving && (
         <View style={styles.savingBar}>

@@ -104,6 +104,8 @@
     "review": {
       "title": "Review your request",
       "hint": "Check your details before saving",
+      "editTitle": "Review your changes",
+      "editHint": "Review your changes, then save",
       "name": "Name",
       "phone": "Phone",
       "bio": "About",

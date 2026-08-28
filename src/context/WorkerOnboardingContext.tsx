@@ -75,7 +75,9 @@ const DEFAULT_DATA: WorkerOnboardingData = {
 
 interface WorkerOnboardingContextValue {
   data: WorkerOnboardingData;
+  edit: boolean;
   update: (patch: Partial<WorkerOnboardingData>) => void;
+  hydrate: (data: WorkerOnboardingData, edit: boolean) => void;
   reset: () => void;
 }
 
@@ -85,18 +87,29 @@ const WorkerOnboardingContext = createContext<WorkerOnboardingContextValue | nul
 
 export function WorkerOnboardingProvider({ children }: { children: React.ReactNode }) {
   const [data, setData] = useState<WorkerOnboardingData>(DEFAULT_DATA);
+  const [edit, setEdit] = useState(false);
 
   const update = useCallback((patch: Partial<WorkerOnboardingData>) => {
     setData((prev) => ({ ...prev, ...patch }));
   }, []);
 
+  const hydrate = useCallback((next: WorkerOnboardingData, isEdit: boolean) => {
+    setData({
+      ...DEFAULT_DATA,
+      ...next,
+      hours: { ...DEFAULT_HOURS, ...(next.hours ?? {}) },
+    });
+    setEdit(isEdit);
+  }, []);
+
   const reset = useCallback(() => {
     setData(DEFAULT_DATA);
+    setEdit(false);
   }, []);
 
   const value = useMemo(
-    () => ({ data, update, reset }),
-    [data, update, reset],
+    () => ({ data, edit, update, hydrate, reset }),
+    [data, edit, update, hydrate, reset],
   );
 
   return (

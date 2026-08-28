@@ -9,6 +9,7 @@ export type RootStackParamList = {
 
 export type WorkerStackParamList = {
   WorkerHome: undefined;
+  WorkerOnboarding: { edit?: boolean } | undefined;
 };
 
 export type WorkerOnboardingParamList = {
