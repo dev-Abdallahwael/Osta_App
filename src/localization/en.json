@@ -77,7 +77,8 @@
       "autoDetect": "Detect my location",
       "orManual": "Or enter the address manually",
       "addressPlaceholder": "Enter the area address",
-      "radius": "Coverage radius"
+      "radius": "Coverage radius",
+      "wholeCity": "Whole city"
     },
     "days": {
       "sat": "Saturday",

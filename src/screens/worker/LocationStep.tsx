@@ -14,7 +14,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useWorkerOnboarding } from '../../context/WorkerOnboardingContext';
 import OnboardingLayout, { StepHeader } from '../../components/OnboardingLayout';
 
-const RADII = [3, 5, 10, 15];
+const RADII = [5, 15, 25, 35, 45, 55, 65, 75];
 
 export default function LocationStep() {
   const { t } = useTranslation();
@@ -93,15 +93,18 @@ export default function LocationStep() {
       />
 
       <Text style={[styles.radiusLabel, { color: colors.textPrimary }]}>
-        {t('workerOnboarding.location.radius')}: {data.radiusKm} km
+        {t('workerOnboarding.location.radius')}:
+        {data.coverWholeCity
+          ? ' ' + t('workerOnboarding.location.wholeCity')
+          : ` ${data.radiusKm} km`}
       </Text>
-      <View style={styles.radiusRow}>
+      <View style={styles.radiusWrap}>
         {RADII.map((r) => {
-          const active = data.radiusKm === r;
+          const active = !data.coverWholeCity && data.radiusKm === r;
           return (
             <Pressable
               key={r}
-              onPress={() => update({ radiusKm: r })}
+              onPress={() => update({ radiusKm: r, coverWholeCity: false })}
               style={[
                 styles.radiusBtn,
                 {
@@ -121,6 +124,26 @@ export default function LocationStep() {
             </Pressable>
           );
         })}
+        <Pressable
+          onPress={() => update({ coverWholeCity: true })}
+          style={[
+            styles.radiusBtn,
+            styles.cityBtn,
+            {
+              backgroundColor: colors.surface,
+              borderColor: data.coverWholeCity ? colors.accent : colors.border,
+            },
+          ]}
+        >
+          <Text
+            style={[
+              styles.radiusText,
+              { color: data.coverWholeCity ? colors.accent : colors.textSecondary },
+            ]}
+          >
+            {t('workerOnboarding.location.wholeCity')}
+          </Text>
+        </Pressable>
       </View>
     </OnboardingLayout>
   );
@@ -155,16 +178,21 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: 10,
   },
-  radiusRow: {
+  radiusWrap: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 10,
   },
   radiusBtn: {
-    flex: 1,
+    minWidth: 72,
     borderWidth: 2,
     borderRadius: 20,
     paddingVertical: 12,
+    paddingHorizontal: 14,
     alignItems: 'center',
+  },
+  cityBtn: {
+    minWidth: 108,
   },
   radiusText: {
     fontSize: 14,

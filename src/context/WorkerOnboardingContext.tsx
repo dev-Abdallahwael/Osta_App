@@ -42,6 +42,7 @@ export interface WorkerOnboardingData {
   prices: PriceEntry[];
   location: LocationData | null;
   radiusKm: number;
+  coverWholeCity: boolean;
   availableDays: DayKey[];
   hours: Record<DayKey, DayHours>;
 }
@@ -67,6 +68,7 @@ const DEFAULT_DATA: WorkerOnboardingData = {
   prices: [],
   location: null,
   radiusKm: 5,
+  coverWholeCity: false,
   availableDays: DEFAULT_AVAILABLE_DAYS,
   hours: DEFAULT_HOURS,
 };

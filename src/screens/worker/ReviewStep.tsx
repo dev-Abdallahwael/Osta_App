@@ -60,7 +60,10 @@ export default function ReviewStep() {
                 {data.location.address}
               </Text>
               <Text style={[styles.locationSub, { color: colors.textSecondary }]}>
-                {t('workerOnboarding.review.radius')}: {data.radiusKm} km
+                {t('workerOnboarding.review.radius')}:{' '}
+                {data.coverWholeCity
+                  ? t('workerOnboarding.location.wholeCity')
+                  : `${data.radiusKm} km`}
               </Text>
             </View>
           </>
