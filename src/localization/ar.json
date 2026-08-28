@@ -49,8 +49,8 @@
     "optional": "(اختياري)",
     "phone": {
       "title": "رقم هاتفك",
-      "hint": "سيتواصل معك العملاء على هذا الرقم",
-      "placeholder": "05xxxxxxxx"
+      "hint": "سيتواصل معك العملاء على هذا الرقم (مصر +20)",
+      "numberPlaceholder": "1xx xxx xxxx"
     },
     "personal": {
       "title": "بياناتك الشخصية",
@@ -68,7 +68,7 @@
       "title": "أسعار خدماتك",
       "hint": "حدّد سعر البدء لكل خدمة اخترتها",
       "from": "من",
-      "currency": "ر.س"
+      "currency": "ج.م"
     },
     "location": {
       "title": "موقع العمل",

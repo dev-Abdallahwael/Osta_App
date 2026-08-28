@@ -84,7 +84,10 @@ export default function OnboardingLayout({
             styles.continueBtn,
             { backgroundColor: canContinue ? colors.accent : colors.border },
           ]}
-          onPress={() => navigation.navigate(STEP_NAMES[step - 1] as never)}
+          onPress={() => {
+            const next = STEP_NAMES[step];
+            if (next) navigation.navigate(next as never);
+          }}
           disabled={!canContinue}
         >
           <Text style={styles.continueText}>{t('workerOnboarding.continue')}</Text>

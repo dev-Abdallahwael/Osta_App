@@ -49,8 +49,8 @@
     "optional": "(optional)",
     "phone": {
       "title": "Your phone number",
-      "hint": "Customers will reach you on this number",
-      "placeholder": "05xxxxxxxx"
+      "hint": "Customers will reach you on this number (Egypt +20)",
+      "numberPlaceholder": "1xx xxx xxxx"
     },
     "personal": {
       "title": "Your details",
@@ -68,7 +68,7 @@
       "title": "Your service prices",
       "hint": "Set a starting price for each service you picked",
       "from": "From",
-      "currency": "SAR"
+      "currency": "EGP"
     },
     "location": {
       "title": "Work area",
