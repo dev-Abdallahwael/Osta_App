@@ -240,6 +240,20 @@
     "priceNego": "السعر قابل للتفاوض",
     "noRating": "لا تقييمات بعد"
   },
+  "workerProfile": {
+    "notFound": "الملف غير موجود",
+    "noRating": "لا تقييمات بعد",
+    "available": "متاح الآن",
+    "bio": "نبذة",
+    "services": "الخدمات والأسعار",
+    "hours": "أوقات العمل",
+    "coverage": "نطاق التغطية",
+    "coverageWholeCity": "يغطي المدينة بأكملها",
+    "coverageRadius": "يغطي حتى {{radius}} كم",
+    "chat": "دردشة",
+    "chatTitle": "المحادثة",
+    "chatComingSoon": "المحادثات ستتوفر في مهمة لاحقة."
+  },
   "tabs": {
     "home": "الرئيسية",
     "profile": "الملف",

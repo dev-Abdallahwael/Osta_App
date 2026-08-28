@@ -19,6 +19,7 @@ export type MainTabParamList = {
 export type HomeStackParamList = {
   HomeScreen: undefined;
   CategoryWorkers: { categoryId: string };
+  WorkerProfile: { workerId: string };
 };
 
 export type WorkerOnboardingParamList = {

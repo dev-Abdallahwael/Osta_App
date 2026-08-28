@@ -8,7 +8,8 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '../../context/ThemeContext';
 import { CATEGORIES } from '../../data/categories';
 import type { HomeStackParamList } from '../../navigation/types';
@@ -30,6 +31,7 @@ function isFeaturedNow(hit: WorkerSearchHit): boolean {
 export default function CategoryWorkersScreen({ route }: Props) {
   const { t } = useTranslation();
   const { colors } = useTheme();
+  const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
   const cat = CATEGORIES.find((c) => c.id === route.params.categoryId);
   const [inRange, setInRange] = useState<WorkerSearchHit[]>([]);
   const [nearest, setNearest] = useState<WorkerSearchHit[]>([]);
@@ -133,13 +135,25 @@ export default function CategoryWorkersScreen({ route }: Props) {
             {t('categoryWorkers.noCoverage')}
           </Text>
           {displayed().map((hit) => (
-            <WorkerCard key={hit.uid} hit={hit} />
+            <WorkerCard
+              key={hit.uid}
+              hit={hit}
+              onPress={() =>
+                navigation.navigate('WorkerProfile', { workerId: hit.uid })
+              }
+            />
           ))}
         </ScrollView>
       ) : displayed().length > 0 ? (
         <ScrollView contentContainerStyle={styles.list}>
           {displayed().map((hit) => (
-            <WorkerCard key={hit.uid} hit={hit} />
+            <WorkerCard
+              key={hit.uid}
+              hit={hit}
+              onPress={() =>
+                navigation.navigate('WorkerProfile', { workerId: hit.uid })
+              }
+            />
           ))}
         </ScrollView>
       ) : (
@@ -151,7 +165,7 @@ export default function CategoryWorkersScreen({ route }: Props) {
   );
 }
 
-function WorkerCard({ hit }: { hit: WorkerSearchHit }) {
+function WorkerCard({ hit, onPress }: { hit: WorkerSearchHit; onPress: () => void }) {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const showFeatured = isFeaturedNow(hit);
@@ -161,7 +175,10 @@ function WorkerCard({ hit }: { hit: WorkerSearchHit }) {
       : '';
 
   return (
-    <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+    <Pressable
+      style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}
+      onPress={onPress}
+    >
       <UserAvatar uri={hit.photoURL} size={56} />
       <View style={styles.cardBody}>
         <View style={styles.cardTop}>
@@ -186,7 +203,7 @@ function WorkerCard({ hit }: { hit: WorkerSearchHit }) {
           </Text>
         ) : null}
       </View>
-    </View>
+    </Pressable>
   );
 }
 

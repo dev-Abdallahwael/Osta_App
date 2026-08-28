@@ -240,6 +240,20 @@
     "priceNego": "Price negotiable",
     "noRating": "No ratings yet"
   },
+  "workerProfile": {
+    "notFound": "Profile not found",
+    "noRating": "No ratings yet",
+    "available": "Available now",
+    "bio": "About",
+    "services": "Services & prices",
+    "hours": "Working hours",
+    "coverage": "Coverage range",
+    "coverageWholeCity": "Covers the whole city",
+    "coverageRadius": "Covers up to {{radius}} km",
+    "chat": "Chat",
+    "chatTitle": "Conversation",
+    "chatComingSoon": "Chat will be available in a later task."
+  },
   "tabs": {
     "home": "Home",
     "profile": "Profile",

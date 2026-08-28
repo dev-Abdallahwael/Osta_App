@@ -8,6 +8,7 @@ import { useApp } from '../context/AppContext';
 import type { MainTabParamList, HomeStackParamList } from './types';
 import UserHomeScreen from '../screens/user/UserHomeScreen';
 import CategoryWorkersScreen from '../screens/user/CategoryWorkersScreen';
+import WorkerProfileScreen from '../screens/user/WorkerProfileScreen';
 import WorkerDashboardScreen from '../screens/worker/WorkerDashboardScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import SettingsScreen from '../screens/SettingsScreen';
@@ -42,6 +43,11 @@ function HomeStackNavigator() {
       <HomeStack.Screen
         name="CategoryWorkers"
         component={CategoryWorkersScreen}
+        options={{ headerShown: true, title: '' }}
+      />
+      <HomeStack.Screen
+        name="WorkerProfile"
+        component={WorkerProfileScreen}
         options={{ headerShown: true, title: '' }}
       />
     </HomeStack.Navigator>
