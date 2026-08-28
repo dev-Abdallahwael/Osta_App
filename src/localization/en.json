@@ -65,10 +65,11 @@
       "hint": "Select all the services you offer"
     },
     "price": {
-      "title": "Your service prices",
-      "hint": "Set a starting price for each service you picked",
+      "title": "Your hourly rate",
+      "hint": "Set the hourly rate for each service you picked",
       "from": "From",
-      "currency": "EGP"
+      "currency": "EGP",
+      "perHour": "EGP/hour"
     },
     "location": {
       "title": "Work area",

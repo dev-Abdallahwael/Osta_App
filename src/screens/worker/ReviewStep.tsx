@@ -44,7 +44,7 @@ export default function ReviewStep() {
                 {t(c.nameKey)}
               </Text>
               <Text style={{ color: colors.textPrimary }}>
-                {priceFor(c.id)} {t('workerOnboarding.price.currency')}
+                {priceFor(c.id)} {t('workerOnboarding.price.perHour')}
               </Text>
             </View>
           ))}

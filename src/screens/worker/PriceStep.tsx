@@ -63,7 +63,7 @@ export default function PriceStep() {
               ]}
             />
             <Text style={[styles.currency, { color: colors.textSecondary }]}>
-              {t('workerOnboarding.price.currency')}
+              {t('workerOnboarding.price.perHour')}
             </Text>
           </View>
         )}
