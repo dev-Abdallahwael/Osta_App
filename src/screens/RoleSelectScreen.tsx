@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTheme } from '../context/ThemeContext';
 import { useApp } from '../context/AppContext';
 import { signInWithEmailPassword } from '../services/auth';
+import type { RootStackParamList } from '../navigation/types';
 
 const TEST_ACCOUNTS = {
   worker: { email: 'worker@test.com', password: '123456789' },
@@ -13,6 +16,7 @@ const TEST_ACCOUNTS = {
 export default function RoleSelectScreen() {
   const { t } = useTranslation();
   const { colors } = useTheme();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { completeOnboarding } = useApp();
   const [busy, setBusy] = useState<null | 'worker' | 'user'>(null);
 
@@ -73,6 +77,12 @@ export default function RoleSelectScreen() {
           </Pressable>
         ))}
       </View>
+
+      <Pressable onPress={() => navigation.navigate('Login')} style={styles.loginLink}>
+        <Text style={[styles.loginLinkText, { color: colors.accent }]}>
+          {t('roleSelect.signInLink')}
+        </Text>
+      </Pressable>
     </View>
   );
 }
@@ -122,5 +132,14 @@ const styles = StyleSheet.create({
   cardSub: {
     fontSize: 13,
     textAlign: 'center',
+  },
+  loginLink: {
+    marginTop: 28,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+  },
+  loginLinkText: {
+    fontSize: 15,
+    fontWeight: '600',
   },
 });

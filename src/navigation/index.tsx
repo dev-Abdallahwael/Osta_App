@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useApp } from '../context/AppContext';
 import RoleSelectScreen from '../screens/RoleSelectScreen';
+import LoginScreen from '../screens/LoginScreen';
 import PlaceholderHomeScreen from '../screens/PlaceholderHomeScreen';
 import type { RootStackParamList, WorkerStackParamList, UserStackParamList } from './types';
 
@@ -10,12 +11,20 @@ const RootStack = createNativeStackNavigator<RootStackParamList>();
 const WorkerStack = createNativeStackNavigator<WorkerStackParamList>();
 const UserStack = createNativeStackNavigator<UserStackParamList>();
 
+function WorkerHomeScreen() {
+  return <PlaceholderHomeScreen role="worker" />;
+}
+
+function UserHomeScreen() {
+  return <PlaceholderHomeScreen role="user" />;
+}
+
 function WorkerHome() {
   return (
     <WorkerStack.Navigator>
       <WorkerStack.Screen
         name="WorkerHome"
-        component={() => <PlaceholderHomeScreen role="worker" />}
+        component={WorkerHomeScreen}
         options={{ headerShown: false }}
       />
     </WorkerStack.Navigator>
@@ -27,7 +36,7 @@ function UserHome() {
     <UserStack.Navigator>
       <UserStack.Screen
         name="UserHome"
-        component={() => <PlaceholderHomeScreen role="user" />}
+        component={UserHomeScreen}
         options={{ headerShown: false }}
       />
     </UserStack.Navigator>
@@ -53,6 +62,11 @@ export default function AppNavigator() {
         <RootStack.Screen
           name="RoleSelect"
           component={RoleSelectScreen}
+          options={{ headerShown: false }}
+        />
+        <RootStack.Screen
+          name="Login"
+          component={LoginScreen}
           options={{ headerShown: false }}
         />
         <RootStack.Screen

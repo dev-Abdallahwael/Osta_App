@@ -30,7 +30,17 @@
     "worker": {
       "title": "I offer a service",
       "subtitle": "I am a worker or technician"
-    }
+    },
+    "signInLink": "Sign in with email & password"
+  },
+  "login": {
+    "title": "Sign in",
+    "subtitle": "Enter your email and password",
+    "password": "Password",
+    "submit": "Sign in",
+    "back": "Back",
+    "errorEmpty": "Please enter email and password",
+    "errorInvalid": "Invalid email or password"
   },
   "placeholder": {
     "worker": {
