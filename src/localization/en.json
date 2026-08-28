@@ -1,0 +1,20 @@
+{
+  "app": {
+    "name": "Osta"
+  },
+  "language": {
+    "aria": "Language",
+    "test": {
+      "title": "Localization System",
+      "subtitle": "This text changes when the language changes",
+      "rowIntro": "The order of this row must flip when Arabic is active",
+      "first": "First on the left",
+      "second": "Second on the right",
+      "rowA": "Item A",
+      "rowB": "Item B",
+      "description": "Text reads left-to-right in English.",
+      "english": "English",
+      "arabic": "Arabic"
+    }
+  }
+}
