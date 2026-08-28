@@ -8,6 +8,7 @@ import LoginScreen from '../screens/LoginScreen';
 import PlaceholderHomeScreen from '../screens/PlaceholderHomeScreen';
 import WorkerDashboardScreen from '../screens/worker/WorkerDashboardScreen';
 import WorkerOnboardingNavigator from './WorkerOnboardingNavigator';
+import UserOnboardingNavigator from './UserOnboardingNavigator';
 import type { RootStackParamList, WorkerStackParamList, UserStackParamList } from './types';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -45,11 +46,12 @@ function EditOnboardingRoute({ route }: EditOnboardingRouteProps) {
 }
 
 function UserHome() {
+  const { userOnboarded } = useApp();
   return (
     <UserStack.Navigator>
       <UserStack.Screen
         name="UserHome"
-        component={UserHomeScreen}
+        component={userOnboarded ? UserHomeScreen : UserOnboardingNavigator}
         options={{ headerShown: false }}
       />
     </UserStack.Navigator>

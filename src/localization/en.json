@@ -193,5 +193,30 @@
       "english": "English",
       "arabic": "Arabic"
     }
+  },
+  "userOnboarding": {
+    "finish": "Finish",
+    "phone": {
+      "title": "What is your phone number?",
+      "hint": "We'll use it to reach you about your bookings",
+      "numberPlaceholder": "10xxxxxxxxx"
+    },
+    "details": {
+      "title": "Tell us about you",
+      "hint": "Your name and location help us find services near you",
+      "nameLabel": "Full name",
+      "namePlaceholder": "Enter your name",
+      "locationLabel": "Your location",
+      "detectLocation": "📍 Detect my location automatically",
+      "detectHint": "Allow location access (optional)",
+      "locationNearby": "Nearby location",
+      "locationAddress": "Location saved",
+      "locationDeniedTitle": "Access denied",
+      "locationDeniedBody": "You didn't grant location access. You can continue without it.",
+      "locationErrorTitle": "Couldn't detect location",
+      "locationErrorBody": "Something went wrong while detecting your location. Try again later.",
+      "submitErrorTitle": "Couldn't save",
+      "submitErrorBody": "Something went wrong while saving your details. Try again."
+    }
   }
 }

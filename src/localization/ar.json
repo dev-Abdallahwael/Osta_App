@@ -193,5 +193,30 @@
       "english": "الإنجليزية",
       "arabic": "العربية"
     }
+  },
+  "userOnboarding": {
+    "finish": "إنهاء",
+    "phone": {
+      "title": "ما هو رقم هاتفك؟",
+      "hint": "سنستخدمه للتواصل معك بخصوص حجوزاتك",
+      "numberPlaceholder": "10xxxxxxxxx"
+    },
+    "details": {
+      "title": "أخبرنا عنك",
+      "hint": "اسمك وموقعك ليساعدنا في إيجاد الأقرب لك",
+      "nameLabel": "الاسم الكامل",
+      "namePlaceholder": "اكتب اسمك",
+      "locationLabel": "موقعك",
+      "detectLocation": "📍 كشف موقعي تلقائياً",
+      "detectHint": "السماح بالوصول لموقعك (اختياري)",
+      "locationNearby": "موقع قريب",
+      "locationAddress": "تم حفظ موقعك",
+      "locationDeniedTitle": "الوصول مرفوض",
+      "locationDeniedBody": "لم تمنح إذن الوصول للموقع. يمكنك المتابعة بدونه.",
+      "locationErrorTitle": "تعذر كشف الموقع",
+      "locationErrorBody": "حدث خطأ أثناء محاولة كشف موقعك، يرجى المحاولة لاحقاً.",
+      "submitErrorTitle": "تعذر الحفظ",
+      "submitErrorBody": "حدث خطأ أثناء حفظ بياناتك. حاول مرة أخرى."
+    }
   }
 }

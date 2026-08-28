@@ -25,3 +25,8 @@ export type WorkerOnboardingParamList = {
 export type UserStackParamList = {
   UserHome: undefined;
 };
+
+export type UserOnboardingParamList = {
+  UserPhoneStep: undefined;
+  UserDetailsStep: undefined;
+};
