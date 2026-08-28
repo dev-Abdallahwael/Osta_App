@@ -123,9 +123,26 @@
   "workerDashboard": {
     "newWorker": "Welcome!",
     "live": "Your profile is live",
+    "availableNow": "Available now",
+    "notAvailable": "Not available",
+    "availabilityHint": "When off, you won't appear in search results",
+    "ratingPlaceholder": "Rating coming soon",
+    "chatsTitle": "Chats",
+    "chatsEmpty": "No chats yet — when customers contact you, they will show up here.",
     "profileTitle": "Your profile",
     "profileText": "Your profile was saved and is available for customers to reach you.",
-    "services": "Number of services"
+    "services": "Number of services",
+    "phone": "Phone",
+    "coverage": "Coverage radius",
+    "wholeCity": "Whole city",
+    "editProfile": "Edit profile",
+    "boost": "Boost my listing",
+    "comingSoonTitle": "Coming soon",
+    "editComingSoon": "Editing your profile will be enabled in a later task.",
+    "boostComingSoon": "Boosting your listing will be enabled later.",
+    "toggleErrorTitle": "Update failed",
+    "toggleErrorBody": "Something went wrong updating your status. Please try again.",
+    "ok": "OK"
   },
   "placeholder": {
     "worker": {

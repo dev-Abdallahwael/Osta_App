@@ -123,9 +123,26 @@
   "workerDashboard": {
     "newWorker": "سعيد بانضمامك!",
     "live": "ملفك نشط الآن",
+    "availableNow": "متاح الآن",
+    "notAvailable": "غير متاح",
+    "availabilityHint": "عند إيقاف التوفر لن تظهر في نتائج البحث",
+    "ratingPlaceholder": "التقييم متاح قريبًا",
+    "chatsTitle": "المحادثات",
+    "chatsEmpty": "لا توجد محادثات بعد — عندما يتواصل معك عملاء ستظهر هنا.",
     "profileTitle": "ملفك الشخصي",
     "profileText": "تم حفظ ملفك وهو متاح للعملاء للتواصل معك.",
-    "services": "عدد الخدمات"
+    "services": "عدد الخدمات",
+    "phone": "الهاتف",
+    "coverage": "نطاق التغطية",
+    "wholeCity": "كامل المدينة",
+    "editProfile": "تعديل الملف",
+    "boost": "تسريع الظهور",
+    "comingSoonTitle": "قريبًا",
+    "editComingSoon": "تعديل الملف سيفعّل في مهمة لاحقة.",
+    "boostComingSoon": "ميزة تسريع الظهور ستفعّل لاحقًا.",
+    "toggleErrorTitle": "تعذّر التحديث",
+    "toggleErrorBody": "حدث خطأ أثناء تحديث حالتك. حاول مرة أخرى.",
+    "ok": "حسنًا"
   },
   "placeholder": {
     "worker": {

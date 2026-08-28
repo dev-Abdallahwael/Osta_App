@@ -109,6 +109,20 @@ export interface WorkerProfile {
   coversWholeCity: boolean;
 }
 
+export async function setWorkerAvailability(
+  workerId: string,
+  isAvailable: boolean,
+): Promise<void> {
+  if (!hasConfig || !db) {
+    throw new Error('Firebase not configured');
+  }
+  await setDoc(
+    doc(db, 'workers', workerId),
+    { isAvailable },
+    { merge: true },
+  );
+}
+
 export async function getWorkerProfile(workerId: string): Promise<WorkerProfile | null> {
   if (!hasConfig || !db) {
     return null;

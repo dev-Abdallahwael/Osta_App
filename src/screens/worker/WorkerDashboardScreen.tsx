@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Pressable,
   ScrollView,
   StyleSheet,
+  Switch,
   Text,
   View,
 } from 'react-native';
@@ -11,7 +13,11 @@ import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../context/ThemeContext';
 import { useApp } from '../../context/AppContext';
 import { getCurrentUserId } from '../../services/auth';
-import { getWorkerProfile, type WorkerProfile } from '../../services/worker';
+import {
+  getWorkerProfile,
+  setWorkerAvailability,
+  type WorkerProfile,
+} from '../../services/worker';
 import UserAvatar from '../../components/UserAvatar';
 
 export default function WorkerDashboardScreen() {
@@ -20,6 +26,7 @@ export default function WorkerDashboardScreen() {
   const { clearRole, markWorkerOnboarded } = useApp();
   const [profile, setProfile] = useState<WorkerProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [toggling, setToggling] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -37,6 +44,28 @@ export default function WorkerDashboardScreen() {
       mounted = false;
     };
   }, [markWorkerOnboarded]);
+
+  const toggleAvailability = useCallback(async () => {
+    if (toggling || !profile) return;
+    const next = !profile.isAvailable;
+    setToggling(true);
+    const previous = profile.isAvailable;
+    setProfile((p) => (p ? { ...p, isAvailable: next } : p));
+    try {
+      const uid = getCurrentUserId();
+      if (uid) await setWorkerAvailability(uid, next);
+    } catch (err) {
+      console.warn('Availability update failed:', err);
+      setProfile((p) => (p ? { ...p, isAvailable: previous } : p));
+      Alert.alert(
+        t('workerDashboard.toggleErrorTitle'),
+        t('workerDashboard.toggleErrorBody'),
+        [{ text: t('workerDashboard.ok') }],
+      );
+    } finally {
+      setToggling(false);
+    }
+  }, [toggling, profile, t]);
 
   if (loading) {
     return (
@@ -56,50 +85,132 @@ export default function WorkerDashboardScreen() {
         <Text style={[styles.name, { color: colors.textPrimary }]}>
           {profile?.name || t('workerDashboard.newWorker')}
         </Text>
+
+        <View style={styles.ratingRow}>
+          <Text style={[styles.ratingText, { color: colors.textSecondary }]}>
+            {t('workerDashboard.ratingPlaceholder')}
+          </Text>
+        </View>
+
         <View
           style={[
-            styles.liveBadge,
-            { backgroundColor: profile?.isAvailable ? colors.success : colors.border },
+            styles.availabilityCard,
+            {
+              backgroundColor: colors.surface,
+              borderColor: profile?.isAvailable ? colors.success : colors.border,
+            },
           ]}
         >
-          <View
-            style={[
-              styles.liveDot,
-              { backgroundColor: profile?.isAvailable ? colors.success : colors.textSecondary },
-            ]}
+          <View>
+            <Text style={[styles.availabilityLabel, { color: colors.textPrimary }]}>
+              {profile?.isAvailable
+                ? t('workerDashboard.availableNow')
+                : t('workerDashboard.notAvailable')}
+            </Text>
+            <Text style={[styles.availabilityHint, { color: colors.textSecondary }]}>
+              {t('workerDashboard.availabilityHint')}
+            </Text>
+          </View>
+          <Switch
+            value={profile?.isAvailable ?? false}
+            onValueChange={toggleAvailability}
+            disabled={toggling}
+            trackColor={{ true: colors.accent, false: colors.border }}
           />
-          <Text style={styles.liveText}>
-            {t('workerDashboard.live')}
-          </Text>
         </View>
       </View>
 
+      <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>
+        {t('workerDashboard.chatsTitle')}
+      </Text>
+      <View
+        style={[
+          styles.emptyCard,
+          { backgroundColor: colors.surface, borderColor: colors.border },
+        ]}
+      >
+        <Text style={styles.emptyIcon}>💬</Text>
+        <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
+          {t('workerDashboard.chatsEmpty')}
+        </Text>
+      </View>
+
+      <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>
+        {t('workerDashboard.profileTitle')}
+      </Text>
       <View
         style={[
           styles.card,
           { backgroundColor: colors.surface, borderColor: colors.border },
         ]}
       >
-        <Text style={[styles.cardTitle, { color: colors.textPrimary }]}>
-          {t('workerDashboard.profileTitle')}
-        </Text>
-        <Text style={[styles.cardText, { color: colors.textSecondary }]}>
-          {t('workerDashboard.profileText')}
-        </Text>
-        {profile && profile.categories.length > 0 && (
-          <Text style={[styles.cardText, { color: colors.textSecondary }]}>
-            {t('workerDashboard.services')}: {profile.categories.length}
-          </Text>
-        )}
+        <InfoRow
+          label={t('workerDashboard.phone')}
+          value={profile?.phone || '—'}
+          colors={colors}
+        />
+        <InfoRow
+          label={t('workerDashboard.services')}
+          value={profile ? String(profile.categories.length) : '—'}
+          colors={colors}
+        />
+        <InfoRow
+          label={t('workerDashboard.coverage')}
+          value={
+            profile
+              ? profile.coversWholeCity
+                ? t('workerDashboard.wholeCity')
+                : `${profile.radiusKm} km`
+              : '—'
+          }
+          colors={colors}
+        />
       </View>
 
-      <Pressable
-        style={[styles.button, { backgroundColor: colors.accent }]}
-        onPress={clearRole}
-      >
-        <Text style={styles.buttonText}>{t('placeholder.switchRole')}</Text>
-      </Pressable>
+      <View style={styles.actions}>
+        <Pressable
+          style={[styles.actionBtn, { backgroundColor: colors.accent }]}
+          onPress={() => Alert.alert(t('workerDashboard.comingSoonTitle'), t('workerDashboard.editComingSoon'))}
+        >
+          <Text style={styles.actionText}>{t('workerDashboard.editProfile')}</Text>
+        </Pressable>
+        <Pressable
+          style={[styles.actionBtn, { backgroundColor: colors.surface, borderColor: colors.accent, borderWidth: 2 }]}
+          onPress={() => Alert.alert(t('workerDashboard.comingSoonTitle'), t('workerDashboard.boostComingSoon'))}
+        >
+          <Text style={[styles.actionText, { color: colors.accent }]}>
+            {t('workerDashboard.boost')}
+          </Text>
+        </Pressable>
+        <Pressable
+          style={[styles.actionBtn, { backgroundColor: colors.surface }]}
+          onPress={clearRole}
+        >
+          <Text style={[styles.actionText, { color: colors.textSecondary }]}>
+            {t('placeholder.switchRole')}
+          </Text>
+        </Pressable>
+      </View>
     </ScrollView>
+  );
+}
+
+function InfoRow({
+  label,
+  value,
+  colors,
+}: {
+  label: string;
+  value: string;
+  colors: { textPrimary: string; textSecondary: string };
+}) {
+  return (
+    <View style={styles.infoRow}>
+      <Text style={{ color: colors.textSecondary, fontSize: 14 }}>{label}</Text>
+      <Text style={{ color: colors.textPrimary, fontSize: 14, fontWeight: '600' }}>
+        {value}
+      </Text>
+    </View>
   );
 }
 
@@ -112,62 +223,86 @@ const styles = StyleSheet.create({
   content: {
     padding: 20,
     paddingTop: 70,
-    flexGrow: 1,
-    alignItems: 'center',
   },
   head: {
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 20,
   },
   name: {
     fontSize: 22,
     fontWeight: '700',
     marginTop: 12,
   },
-  liveBadge: {
+  ratingRow: {
+    marginTop: 6,
+  },
+  ratingText: {
+    fontSize: 14,
+  },
+  availabilityCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    marginTop: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 5,
+    justifyContent: 'space-between',
+    marginTop: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     borderRadius: 14,
+    width: '100%',
+    borderWidth: 1,
   },
-  liveDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+  availabilityLabel: {
+    fontSize: 16,
+    fontWeight: '700',
   },
-  liveText: {
-    color: '#ffffff',
-    fontSize: 13,
-    fontWeight: '600',
+  availabilityHint: {
+    fontSize: 12,
+    marginTop: 2,
+  },
+  sectionTitle: {
+    fontSize: 17,
+    fontWeight: '700',
+    marginTop: 18,
+    marginBottom: 10,
+  },
+  emptyCard: {
+    borderWidth: 1,
+    borderRadius: 16,
+    padding: 20,
+    alignItems: 'center',
+  },
+  emptyIcon: {
+    fontSize: 28,
+    marginBottom: 8,
+  },
+  emptyText: {
+    fontSize: 14,
+    textAlign: 'center',
   },
   card: {
-    width: '100%',
     borderWidth: 1,
     borderRadius: 16,
     padding: 16,
-    marginBottom: 24,
   },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    marginBottom: 6,
+  infoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 6,
   },
-  cardText: {
-    fontSize: 14,
-    lineHeight: 20,
-    marginBottom: 4,
+  actions: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 24,
+    flexWrap: 'wrap',
   },
-  button: {
+  actionBtn: {
     paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 24,
+    paddingHorizontal: 18,
+    borderRadius: 22,
+    alignItems: 'center',
   },
-  buttonText: {
+  actionText: {
     color: '#ffffff',
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '600',
   },
 });
