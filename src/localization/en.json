@@ -46,6 +46,7 @@
     "step": "Step",
     "of": "of",
     "continue": "Continue",
+    "submit": "Save",
     "optional": "(optional)",
     "phone": {
       "title": "Your phone number",
@@ -91,7 +92,10 @@
     },
     "hours": {
       "title": "Working hours",
-      "hint": "Set the days and times you are available",
+      "hint": "Set your working days and hours",
+      "selectDays": "Working days",
+      "timeRange": "Working hours",
+      "appliesToAll": "This time applies to all selected days",
       "from": "From",
       "to": "To",
       "add": "Enable",
@@ -107,9 +111,10 @@
       "location": "Location",
       "radius": "Coverage radius",
       "hours": "Working hours",
-      "note": "Saving will be enabled soon"
-    }
-  },
+      "note": "Saving will be enabled soon",
+      "comingSoonTitle": "Coming soon",
+      "comingSoonBody": "Saving will be enabled in the next task"
+    },
   "placeholder": {
     "worker": {
       "title": "Worker Dashboard",

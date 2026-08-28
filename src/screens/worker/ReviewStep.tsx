@@ -10,6 +10,13 @@ export default function ReviewStep() {
   const { colors } = useTheme();
   const { data } = useWorkerOnboarding();
 
+  function to12h(value: string): string {
+    const [hh, mm] = value.split(':').map(Number);
+    const period = hh >= 12 ? 'PM' : 'AM';
+    const h12 = hh % 12 === 0 ? 12 : hh % 12;
+    return `${h12}:${String(mm).padStart(2, '0')} ${period}`;
+  }
+
   function priceFor(categoryId: string): string {
     return (
       data.prices.find((p) => p.categoryId === categoryId)?.price ?? '—'
@@ -81,7 +88,7 @@ export default function ReviewStep() {
                   {t(`workerOnboarding.days.${day}`)}
                 </Text>
                 <Text style={{ color: colors.textSecondary }}>
-                  {h.start} – {h.end}
+                  {to12h(h.start)} – {to12h(h.end)}
                 </Text>
               </View>
             );

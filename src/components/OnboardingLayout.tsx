@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Alert,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -32,6 +33,7 @@ interface Props {
   canContinue?: boolean;
   scroll?: boolean;
   children: React.ReactNode;
+  onFinish?: () => void;
 }
 
 export default function OnboardingLayout({
@@ -40,6 +42,7 @@ export default function OnboardingLayout({
   canContinue = true,
   scroll = true,
   children,
+  onFinish,
 }: Props) {
   const { t } = useTranslation();
   const { colors } = useTheme();
@@ -60,6 +63,24 @@ export default function OnboardingLayout({
   ) : (
     <View style={styles.listContent}>{children}</View>
   );
+
+  function handlePrimary() {
+    const next = STEP_NAMES[step];
+    if (next) {
+      navigation.navigate(next as never);
+      return;
+    }
+    if (onFinish) {
+      onFinish();
+      return;
+    }
+    Alert.alert(
+      t('workerOnboarding.review.comingSoonTitle'),
+      t('workerOnboarding.review.comingSoonBody'),
+    );
+  }
+
+  const isLastStep = step === total;
 
   return (
     <KeyboardAvoidingView
@@ -84,13 +105,14 @@ export default function OnboardingLayout({
             styles.continueBtn,
             { backgroundColor: canContinue ? colors.accent : colors.border },
           ]}
-          onPress={() => {
-            const next = STEP_NAMES[step];
-            if (next) navigation.navigate(next as never);
-          }}
+          onPress={handlePrimary}
           disabled={!canContinue}
         >
-          <Text style={styles.continueText}>{t('workerOnboarding.continue')}</Text>
+          <Text style={styles.continueText}>
+            {isLastStep
+              ? t('workerOnboarding.submit')
+              : t('workerOnboarding.continue')}
+          </Text>
         </Pressable>
       </View>
     </KeyboardAvoidingView>
