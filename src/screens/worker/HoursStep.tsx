@@ -43,7 +43,8 @@ export default function HoursStep() {
 
   function applyTime(field: 'start' | 'end', value: string) {
     const hours = { ...data.hours };
-    const target = data.availableDays.length > 0 ? data.availableDays : ['sat'];
+    const target: DayKey[] =
+      data.availableDays.length > 0 ? data.availableDays : ['sat'];
     for (const day of target) {
       hours[day] = { ...hours[day], [field]: value };
     }

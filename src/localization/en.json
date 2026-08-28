@@ -114,7 +114,8 @@
       "note": "Saving will be enabled soon",
       "comingSoonTitle": "Coming soon",
       "comingSoonBody": "Saving will be enabled in the next task"
-    },
+    }
+  },
   "placeholder": {
     "worker": {
       "title": "Worker Dashboard",
