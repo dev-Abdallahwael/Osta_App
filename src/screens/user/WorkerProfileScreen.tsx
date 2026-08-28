@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '../../context/ThemeContext';
 import { CATEGORIES } from '../../data/categories';
 import type { HomeStackParamList } from '../../navigation/types';
 import { getWorkerProfile, type WorkerProfile } from '../../services/worker';
+import { getOrCreateChat } from '../../services/chat';
+import { getCurrentUserId } from '../../services/auth';
 import UserAvatar from '../../components/UserAvatar';
 
 type Props = NativeStackScreenProps<HomeStackParamList, 'WorkerProfile'>;
@@ -22,8 +25,10 @@ const DAY_ORDER = ['sat', 'sun', 'mon', 'tue', 'wed', 'thu', 'fri'];
 export default function WorkerProfileScreen({ route }: Props) {
   const { t } = useTranslation();
   const { colors } = useTheme();
+  const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
   const [worker, setWorker] = useState<WorkerProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [chatting, setChatting] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -63,6 +68,25 @@ export default function WorkerProfileScreen({ route }: Props) {
     start: worker.availableHours[d].start,
     end: worker.availableHours[d].end,
   }));
+
+  async function handleChat() {
+    if (chatting || !worker) return;
+    const me = getCurrentUserId();
+    if (!me) return;
+    setChatting(true);
+    try {
+      const chatId = await getOrCreateChat(me, route.params.workerId);
+      navigation.navigate('Chat', {
+        chatId,
+        otherId: route.params.workerId,
+        otherName: worker.name,
+      });
+    } catch (err) {
+      console.warn('open chat failed:', err);
+    } finally {
+      setChatting(false);
+    }
+  }
 
   return (
     <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={styles.container}>
@@ -137,11 +161,11 @@ export default function WorkerProfileScreen({ route }: Props) {
 
       <Pressable
         style={[styles.chatBtn, { backgroundColor: colors.accent }]}
-        onPress={() =>
-          Alert.alert(t('workerProfile.chatTitle'), t('workerProfile.chatComingSoon'))
-        }
+        onPress={handleChat}
       >
-        <Text style={styles.chatText}>{t('workerProfile.chat')}</Text>
+        <Text style={styles.chatText}>
+          {chatting ? t('workerProfile.chatting') : t('workerProfile.chat')}
+        </Text>
       </Pressable>
     </ScrollView>
   );

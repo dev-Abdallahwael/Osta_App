@@ -251,8 +251,14 @@
     "coverageWholeCity": "يغطي المدينة بأكملها",
     "coverageRadius": "يغطي حتى {{radius}} كم",
     "chat": "دردشة",
+    "chatting": "جارٍ تحميل المحادثة...",
     "chatTitle": "المحادثة",
     "chatComingSoon": "المحادثات ستتوفر في مهمة لاحقة."
+  },
+  "chat": {
+    "inputPlaceholder": "اكتب رسالتك...",
+    "send": "إرسال",
+    "empty": "لا توجد محادثات بعد"
   },
   "tabs": {
     "home": "الرئيسية",

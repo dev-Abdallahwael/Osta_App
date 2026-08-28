@@ -251,8 +251,14 @@
     "coverageWholeCity": "Covers the whole city",
     "coverageRadius": "Covers up to {{radius}} km",
     "chat": "Chat",
+    "chatting": "Opening conversation...",
     "chatTitle": "Conversation",
     "chatComingSoon": "Chat will be available in a later task."
+  },
+  "chat": {
+    "inputPlaceholder": "Type a message...",
+    "send": "Send",
+    "empty": "No conversations yet"
   },
   "tabs": {
     "home": "Home",

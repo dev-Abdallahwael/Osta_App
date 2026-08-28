@@ -9,6 +9,8 @@ import type { MainTabParamList, HomeStackParamList } from './types';
 import UserHomeScreen from '../screens/user/UserHomeScreen';
 import CategoryWorkersScreen from '../screens/user/CategoryWorkersScreen';
 import WorkerProfileScreen from '../screens/user/WorkerProfileScreen';
+import ChatThreadScreen from '../screens/user/ChatThreadScreen';
+import ConversationsScreen from '../screens/user/ConversationsScreen';
 import WorkerDashboardScreen from '../screens/worker/WorkerDashboardScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import SettingsScreen from '../screens/SettingsScreen';
@@ -48,6 +50,16 @@ function HomeStackNavigator() {
       <HomeStack.Screen
         name="WorkerProfile"
         component={WorkerProfileScreen}
+        options={{ headerShown: true, title: '' }}
+      />
+      <HomeStack.Screen
+        name="Chat"
+        component={ChatThreadScreen}
+        options={({ route }) => ({ headerShown: true, title: route.params.otherName ?? '' })}
+      />
+      <HomeStack.Screen
+        name="Conversations"
+        component={ConversationsScreen}
         options={{ headerShown: true, title: '' }}
       />
     </HomeStack.Navigator>

@@ -127,17 +127,18 @@ export default function WorkerDashboardScreen() {
       <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>
         {t('workerDashboard.chatsTitle')}
       </Text>
-      <View
+      <Pressable
         style={[
           styles.emptyCard,
           { backgroundColor: colors.surface, borderColor: colors.border },
         ]}
+        onPress={() => navigation.navigate('Conversations' as never)}
       >
         <Text style={styles.emptyIcon}>💬</Text>
         <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
           {t('workerDashboard.chatsEmpty')}
         </Text>
-      </View>
+      </Pressable>
 
       <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>
         {t('workerDashboard.profileTitle')}

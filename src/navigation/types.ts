@@ -20,6 +20,8 @@ export type HomeStackParamList = {
   HomeScreen: undefined;
   CategoryWorkers: { categoryId: string };
   WorkerProfile: { workerId: string };
+  Chat: { chatId: string; otherId: string; otherName?: string };
+  Conversations: undefined;
 };
 
 export type WorkerOnboardingParamList = {
