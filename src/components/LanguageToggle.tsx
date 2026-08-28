@@ -1,34 +1,20 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
 import type { Language } from '../localization/i18n';
 
-interface Props {
-  activeColor?: string;
-  inactiveColor?: string;
-  textColor?: string;
-  activeTextColor?: string;
-  containerColor?: string;
-}
-
-export default function LanguageToggle({
-  activeColor = '#2563eb',
-  inactiveColor = 'transparent',
-  textColor = '#64748b',
-  activeTextColor = '#ffffff',
-  containerColor = '#e2e8f0',
-}: Props) {
-  const { language, toggleLanguage } = useLanguage();
-  const { t } = useTranslation();
+export default function LanguageToggle() {
+  const { language, setLanguage } = useLanguage();
+  const { colors } = useTheme();
 
   const options: { value: Language; label: string }[] = [
-    { value: 'ar', label: t('language.test.arabic') },
-    { value: 'en', label: t('language.test.english') },
+    { value: 'ar', label: 'AR' },
+    { value: 'en', label: 'EN' },
   ];
 
   return (
-    <View style={[styles.container, { backgroundColor: containerColor }]}>
+    <View style={[styles.row, { borderColor: colors.border }]}>
       {options.map((opt) => {
         const active = language === opt.value;
         return (
@@ -36,18 +22,18 @@ export default function LanguageToggle({
             key={opt.value}
             accessibilityRole="button"
             accessibilityState={{ selected: active }}
-            onPress={() => toggleLanguage(opt.value)}
+            onPress={() => setLanguage(opt.value)}
             style={[
-              styles.option,
-              {
-                backgroundColor: active ? activeColor : inactiveColor,
-              },
+              styles.pill,
+              { borderColor: colors.border },
+              active && { backgroundColor: colors.accent },
             ]}
           >
             <Text
               style={[
-                styles.label,
-                { color: active ? activeTextColor : textColor },
+                styles.pillText,
+                { color: colors.textSecondary },
+                active && styles.pillTextActive,
               ]}
             >
               {opt.label}
@@ -60,20 +46,24 @@ export default function LanguageToggle({
 }
 
 const styles = StyleSheet.create({
-  container: {
+  row: {
     flexDirection: 'row',
-    borderRadius: 24,
-    padding: 4,
+    gap: 8,
   },
-  option: {
-    flex: 1,
+  pill: {
     paddingVertical: 8,
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
     borderRadius: 20,
+    borderWidth: 1,
     alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
   },
-  label: {
+  pillText: {
     fontSize: 15,
     fontWeight: '600',
+  },
+  pillTextActive: {
+    color: '#ffffff',
   },
 });

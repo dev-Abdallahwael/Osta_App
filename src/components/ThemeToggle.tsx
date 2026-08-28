@@ -1,19 +1,18 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import { useTheme } from '../context/ThemeContext';
+import type { ThemeMode } from '../theme/tokens';
 
 export default function ThemeToggle() {
-  const { mode, colors, setMode } = useTheme();
-  const { t } = useTranslation();
+  const { mode, setMode, colors } = useTheme();
 
-  const options: { value: 'dark' | 'light'; label: string }[] = [
-    { value: 'dark', label: t('theme.dark') },
-    { value: 'light', label: t('theme.light') },
+  const options: { value: ThemeMode; label: string }[] = [
+    { value: 'dark', label: '🌙' },
+    { value: 'light', label: '☀️' },
   ];
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+    <View style={[styles.row, { borderColor: colors.border }]}>
       {options.map((opt) => {
         const active = mode === opt.value;
         return (
@@ -23,18 +22,12 @@ export default function ThemeToggle() {
             accessibilityState={{ selected: active }}
             onPress={() => setMode(opt.value)}
             style={[
-              styles.option,
-              {
-                backgroundColor: active ? colors.accent : 'transparent',
-              },
+              styles.pill,
+              { borderColor: colors.border },
+              active && { backgroundColor: colors.accent },
             ]}
           >
-            <Text
-              style={[
-                styles.label,
-                { color: active ? '#ffffff' : colors.textSecondary },
-              ]}
-            >
+            <Text style={[styles.pillText, { color: colors.textSecondary }, active && styles.pillTextActive]}>
               {opt.label}
             </Text>
           </Pressable>
@@ -45,21 +38,24 @@ export default function ThemeToggle() {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  row: {
     flexDirection: 'row',
-    borderRadius: 24,
-    padding: 4,
-    borderWidth: 1,
+    gap: 8,
   },
-  option: {
-    flex: 1,
+  pill: {
     paddingVertical: 8,
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
     borderRadius: 20,
+    borderWidth: 1,
     alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
   },
-  label: {
-    fontSize: 15,
+  pillText: {
+    fontSize: 16,
     fontWeight: '600',
+  },
+  pillTextActive: {
+    color: '#ffffff',
   },
 });

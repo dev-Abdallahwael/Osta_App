@@ -6,6 +6,42 @@
     "dark": "🌙 Dark",
     "light": "☀️ Light"
   },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Current mode: {{mode}}",
+    "languageLabel": "Language",
+    "languageHint": "Choose your display language. It will be saved.",
+    "themeLabel": "Appearance",
+    "themeHint": "Choose between dark and light."
+  },
+  "test": {
+    "categories": {
+      "title": "Categories",
+      "hint": "The fixed category list (localized by language)."
+    }
+  },
+  "categories": {
+    "electrician": { "name": "Electrician" },
+    "plumber": { "name": "Plumber" },
+    "mechanic": { "name": "Auto Mechanic" },
+    "carpenter": { "name": "Carpenter" },
+    "painter": { "name": "Painter" },
+    "ac_technician": { "name": "AC & Refrigeration" },
+    "appliance_repair": { "name": "Appliance Repair" },
+    "satellite_tv": { "name": "Satellite / TV Tech" },
+    "handyman": { "name": "General Handyman" },
+    "locksmith": { "name": "Locksmith" },
+    "mover": { "name": "Movers / Furniture" },
+    "cleaning": { "name": "House Cleaning" },
+    "pest_control": { "name": "Pest Control" },
+    "gardening": { "name": "Gardening / Landscaping" },
+    "tiling": { "name": "Tiling / Flooring" },
+    "welding": { "name": "Welding / Metalwork" },
+    "glass_aluminum": { "name": "Glass & Aluminum" },
+    "water_heater": { "name": "Water Heater Specialist" },
+    "solar": { "name": "Solar Panel Installer" },
+    "renovation": { "name": "Home Renovation" }
+  },
   "language": {
     "aria": "Language",
     "test": {

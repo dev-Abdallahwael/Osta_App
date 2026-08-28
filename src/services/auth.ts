@@ -1,4 +1,10 @@
-import { signInAnonymously, onAuthStateChanged, type User } from 'firebase/auth';
+import {
+  signInAnonymously,
+  signInWithEmailAndPassword,
+  signOut as fbSignOut,
+  onAuthStateChanged,
+  type User,
+} from 'firebase/auth';
 import { auth, hasConfig } from './firebase';
 
 export type AuthListener = (user: User | null) => void;
@@ -22,4 +28,22 @@ export function onAuthChange(listener: AuthListener): () => void {
 
 export function getCurrentUserId(): string | null {
   return auth?.currentUser?.uid ?? null;
+}
+
+export async function signInWithEmailPassword(
+  email: string,
+  password: string,
+): Promise<User> {
+  if (!hasConfig || !auth) {
+    throw new Error('Firebase not configured');
+  }
+  const cred = await signInWithEmailAndPassword(auth, email, password);
+  return cred.user;
+}
+
+export async function signOut(): Promise<void> {
+  if (!hasConfig || !auth) {
+    return;
+  }
+  await fbSignOut(auth);
 }

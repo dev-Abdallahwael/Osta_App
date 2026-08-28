@@ -6,6 +6,42 @@
     "dark": "🌙 داكن",
     "light": "☀️ فاتح"
   },
+  "settings": {
+    "title": "الإعدادات",
+    "subtitle": "الوضع الحالي: {{mode}}",
+    "languageLabel": "اللغة",
+    "languageHint": "اختر لغة العرض وسيتم حفظها.",
+    "themeLabel": "المظهر",
+    "themeHint": "اختر المظهر الداكن أو الفاتح."
+  },
+  "test": {
+    "categories": {
+      "title": "الأقسام",
+      "hint": "قائمة الأقسام الثابتة (تُعرض حسب اللغة)."
+    }
+  },
+  "categories": {
+    "electrician": { "name": "كهربائي" },
+    "plumber": { "name": "سباك" },
+    "mechanic": { "name": "ميكانيكي سيارات" },
+    "carpenter": { "name": "نجار" },
+    "painter": { "name": "دهان" },
+    "ac_technician": { "name": "فني تكييف وتبريد" },
+    "appliance_repair": { "name": "صيانة أجهزة منزلية" },
+    "satellite_tv": { "name": "فني ستالايت وتلفزيون" },
+    "handyman": { "name": "عامل صيانة عامة" },
+    "locksmith": { "name": "فكّار أقفال" },
+    "mover": { "name": "نقل عفش وأثاث" },
+    "cleaning": { "name": "تنظيف منازل" },
+    "pest_control": { "name": "مكافحة حشرات" },
+    "gardening": { "name": "حدائق ومناظر طبيعية" },
+    "tiling": { "name": "سيراميك وبلاط" },
+    "welding": { "name": "لحام وأعمال معدنية" },
+    "glass_aluminum": { "name": "أعمال زجاج وألوميتال" },
+    "water_heater": { "name": "متخصص سخانات مياه" },
+    "solar": { "name": "تركيب ألواح شمسية" },
+    "renovation": { "name": "تجهيز وتجديد منازل" }
+  },
   "language": {
     "aria": "اللغة",
     "test": {

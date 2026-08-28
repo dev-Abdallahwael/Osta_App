@@ -1,51 +1,106 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../context/ThemeContext';
 import LanguageToggle from '../components/LanguageToggle';
 import ThemeToggle from '../components/ThemeToggle';
+import { CATEGORIES } from '../data/categories';
+
+function SettingSection({
+  label,
+  hint,
+  colors,
+  children,
+}: {
+  label: string;
+  hint: string;
+  colors: { surface: string; border: string; textPrimary: string; textSecondary: string };
+  children: React.ReactNode;
+}) {
+  return (
+    <View
+      style={[
+        styles.section,
+        { backgroundColor: colors.surface, borderColor: colors.border },
+      ]}
+    >
+      <Text style={[styles.sectionLabel, { color: colors.textPrimary }]}>
+        {label}
+      </Text>
+      <Text style={[styles.sectionHint, { color: colors.textSecondary }]}>
+        {hint}
+      </Text>
+      {children}
+    </View>
+  );
+}
 
 export default function TestScreen() {
   const { t } = useTranslation();
-  const { colors } = useTheme();
+  const { colors, mode } = useTheme();
+  const modeLabel = mode === 'dark' ? t('theme.dark') : t('theme.light');
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Text style={[styles.title, { color: colors.textPrimary }]}>
-        {t('language.test.title')}
+        {t('settings.title')}
       </Text>
       <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-        {t('language.test.subtitle')}
+        {t('settings.subtitle', { mode: modeLabel })}
       </Text>
 
-      <Text style={[styles.intro, { color: colors.textSecondary }]}>
-        {t('language.test.rowIntro')}
-      </Text>
+      <FlatList
+        data={CATEGORIES}
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+        columnWrapperStyle={styles.gridRow}
+        ListHeaderComponent={
+          <>
+            <Text style={[styles.sectionLabel, { color: colors.textPrimary }]}>
+              {t('test.categories.title')}
+            </Text>
+            <Text style={[styles.sectionHint, { color: colors.textSecondary }]}>
+              {t('test.categories.hint')}
+            </Text>
+          </>
+        }
+        ListFooterComponent={
+          <>
+            <SettingSection
+              label={t('settings.languageLabel')}
+              hint={t('settings.languageHint')}
+              colors={colors}
+            >
+              <LanguageToggle />
+            </SettingSection>
 
-      <View style={styles.row}>
-        <View style={[styles.box, { backgroundColor: colors.accent }]}>
-          <Text style={styles.boxText}>{t('language.test.rowA')}</Text>
-        </View>
-        <View style={[styles.box, { backgroundColor: colors.success }]}>
-          <Text style={styles.boxText}>{t('language.test.rowB')}</Text>
-        </View>
-      </View>
-
-      <Text style={[styles.description, { color: colors.textSecondary }]}>
-        {t('language.test.description')}
-      </Text>
-
-      <View style={styles.toggleContainer}>
-        <LanguageToggle
-          activeColor={colors.accent}
-          inactiveColor="transparent"
-          textColor={colors.textSecondary}
-          activeTextColor="#ffffff"
-          containerColor={colors.surface}
-        />
-        <View style={styles.spacer} />
-        <ThemeToggle />
-      </View>
+            <SettingSection
+              label={t('settings.themeLabel')}
+              hint={t('settings.themeHint')}
+              colors={colors}
+            >
+              <ThemeToggle />
+            </SettingSection>
+          </>
+        }
+        renderItem={({ item }) => (
+          <View
+            style={[
+              styles.categoryCard,
+              { backgroundColor: colors.surface, borderColor: colors.border },
+            ]}
+          >
+            <Text style={styles.categoryIcon}>{item.icon}</Text>
+            <Text
+              style={[styles.categoryName, { color: colors.textPrimary }]}
+              numberOfLines={2}
+            >
+              {t(item.nameKey)}
+            </Text>
+          </View>
+        )}
+        contentContainerStyle={styles.listContent}
+      />
     </View>
   );
 }
@@ -53,51 +108,59 @@ export default function TestScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 24,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: '700',
-    marginBottom: 8,
+    marginBottom: 6,
+    textAlign: 'center',
+    paddingTop: 60,
+    paddingHorizontal: 20,
   },
   subtitle: {
-    fontSize: 16,
-    marginBottom: 24,
-    textAlign: 'center',
-  },
-  intro: {
-    fontSize: 14,
+    fontSize: 15,
     marginBottom: 12,
     textAlign: 'center',
+    paddingHorizontal: 20,
   },
-  row: {
-    flexDirection: 'row',
-    marginBottom: 24,
+  listContent: {
+    padding: 20,
   },
-  box: {
-    width: 110,
-    height: 56,
-    borderRadius: 8,
+  gridRow: {
+    gap: 12,
+    marginBottom: 12,
+  },
+  categoryCard: {
+    flex: 1,
+    borderWidth: 1,
+    borderRadius: 14,
+    padding: 14,
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 6,
+    minHeight: 96,
   },
-  boxText: {
-    color: '#ffffff',
+  categoryIcon: {
+    fontSize: 26,
+    marginBottom: 8,
+  },
+  categoryName: {
     fontSize: 14,
     fontWeight: '600',
-  },
-  description: {
-    fontSize: 14,
-    marginBottom: 24,
     textAlign: 'center',
   },
-  toggleContainer: {
-    marginTop: 8,
+  section: {
+    borderRadius: 16,
+    borderWidth: 1,
+    padding: 16,
+    marginBottom: 20,
   },
-  spacer: {
-    height: 16,
+  sectionLabel: {
+    fontSize: 17,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  sectionHint: {
+    fontSize: 13,
+    marginBottom: 14,
   },
 });
