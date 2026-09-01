@@ -80,9 +80,11 @@ export default function ChatThreadScreen({ route }: Props) {
                     { backgroundColor: mine ? colors.accent : colors.surface },
                   ]}
                 >
-                  <Text style={{ color: mine ? '#fff' : colors.textPrimary }}>
-                    {m.text}
-                  </Text>
+                  {m.text ? (
+                    <Text style={{ color: mine ? '#fff' : colors.textPrimary }}>
+                      {m.text}
+                    </Text>
+                  ) : null}
                 </View>
               </View>
             );

@@ -256,9 +256,14 @@
     "chatComingSoon": "المحادثات ستتوفر في مهمة لاحقة."
   },
   "chat": {
+    "conversations": "المحادثات",
     "inputPlaceholder": "اكتب رسالتك...",
     "send": "إرسال",
-    "empty": "لا توجد محادثات بعد"
+    "empty": "لا توجد محادثات بعد",
+    "now": "الآن",
+    "minuteAgo": "منذ {{n}} د",
+    "hourAgo": "منذ {{n}} س",
+    "dayAgo": "منذ {{n}} يوم"
   },
   "tabs": {
     "home": "الرئيسية",

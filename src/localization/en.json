@@ -256,9 +256,14 @@
     "chatComingSoon": "Chat will be available in a later task."
   },
   "chat": {
+    "conversations": "Chats",
     "inputPlaceholder": "Type a message...",
     "send": "Send",
-    "empty": "No conversations yet"
+    "empty": "No conversations yet",
+    "now": "now",
+    "minuteAgo": "{{n}}m ago",
+    "hourAgo": "{{n}}h ago",
+    "dayAgo": "{{n}}d ago"
   },
   "tabs": {
     "home": "Home",

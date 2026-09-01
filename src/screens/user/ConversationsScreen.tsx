@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Pressable,
@@ -23,6 +23,17 @@ interface Row extends ChatSummary {
   otherName: string;
 }
 
+function relativeTime(ts: number, t: (k: string, o?: Record<string, unknown>) => string): string {
+  if (!ts) return '';
+  const diffMs = Date.now() - ts;
+  const diffMin = Math.floor(diffMs / 60000);
+  if (diffMin < 1) return t('chat.now');
+  if (diffMin < 60) return t('chat.minuteAgo', { n: diffMin });
+  const diffH = Math.floor(diffMin / 60);
+  if (diffH < 24) return t('chat.hourAgo', { n: diffH });
+  return t('chat.dayAgo', { n: Math.floor(diffH / 24) });
+}
+
 export default function ConversationsScreen() {
   const { t } = useTranslation();
   const { colors } = useTheme();
@@ -30,6 +41,10 @@ export default function ConversationsScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({ title: t('chat.conversations') });
+  }, [navigation, t]);
 
   useEffect(() => {
     const me = getCurrentUserId();
@@ -106,7 +121,19 @@ export default function ConversationsScreen() {
                 <Text style={styles.avatarText}>👤</Text>
               </View>
               <View style={styles.body}>
-                <Text style={[styles.name, { color: colors.textPrimary }]}>{c.otherName}</Text>
+                <View style={styles.nameRow}>
+                  <Text
+                    style={[styles.name, { color: colors.textPrimary }]}
+                    numberOfLines={1}
+                  >
+                    {c.otherName}
+                  </Text>
+                  {c.lastMessageAt ? (
+                    <Text style={[styles.time, { color: colors.textSecondary }]}>
+                      {relativeTime(c.lastMessageAt, t)}
+                    </Text>
+                  ) : null}
+                </View>
                 {c.lastMessage ? (
                   <Text
                     style={[styles.preview, { color: colors.textSecondary }]}
@@ -164,9 +191,19 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
   },
+  nameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   name: {
     fontSize: 16,
     fontWeight: '600',
+    flexShrink: 1,
+  },
+  time: {
+    fontSize: 12,
+    marginStart: 8,
   },
   preview: {
     fontSize: 13,
