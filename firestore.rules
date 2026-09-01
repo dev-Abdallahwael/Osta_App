@@ -32,11 +32,14 @@ service cloud.firestore {
 
     // Chats: restricted to participants.
     match /chats/{chatId} {
-      allow read, update: if signedIn() && request.auth.uid in resource.data.participantIds;
+      // Allow the "does this chat exist?" check (resource == null) for the
+      // get-or-create flow, but only participants can read an existing chat.
+      allow read: if signedIn() && (resource == null || request.auth.uid in resource.data.participantIds);
       allow create: if signedIn() && request.auth.uid in request.resource.data.participantIds;
+      allow update: if signedIn() && request.auth.uid in resource.data.participantIds;
+      allow delete: if false;
       match /messages/{messageId} {
-        allow read: if signedIn() && request.auth.uid in resource.data.participantIds;
-        allow create: if signedIn() && get(/databases/$(database)/documents/chats/$(chatId)).data.participantIds.hasAny([request.auth.uid]);
+        allow read, create: if signedIn() && get(/databases/$(database)/documents/chats/$(chatId)).data.participantIds.hasAny([request.auth.uid]);
       }
     }
 
