@@ -8,10 +8,13 @@ import { CATEGORIES } from '../../data/categories';
 import type { HomeStackParamList } from '../../navigation/types';
 import { getWorkerProfile, type WorkerProfile } from '../../services/worker';
 import { getOrCreateChat } from '../../services/chat';
+import { getWorkerReviews, type Review } from '../../services/review';
 import { getCurrentUserId } from '../../services/auth';
 import UserAvatar from '../../components/UserAvatar';
 
 type Props = NativeStackScreenProps<HomeStackParamList, 'WorkerProfile'>;
+
+const REVIEWS_PER_PAGE = 5;
 
 function to12h(value: string): string {
   const [hh, mm] = value.split(':').map(Number);
@@ -27,6 +30,8 @@ export default function WorkerProfileScreen({ route }: Props) {
   const { colors } = useTheme();
   const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
   const [worker, setWorker] = useState<WorkerProfile | null>(null);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [visibleCount, setVisibleCount] = useState(REVIEWS_PER_PAGE);
   const [loading, setLoading] = useState(true);
   const [chatting, setChatting] = useState(false);
 
@@ -34,7 +39,12 @@ export default function WorkerProfileScreen({ route }: Props) {
     let mounted = true;
     (async () => {
       const p = await getWorkerProfile(route.params.workerId);
-      if (mounted) setWorker(p);
+      const r = await getWorkerReviews(route.params.workerId);
+      if (mounted) {
+        setWorker(p);
+        setReviews(r);
+        setVisibleCount(REVIEWS_PER_PAGE);
+      }
       if (mounted) setLoading(false);
     })();
     return () => {
@@ -159,6 +169,51 @@ export default function WorkerProfileScreen({ route }: Props) {
         </Text>
       </View>
 
+      <View style={[styles.section, { backgroundColor: colors.surface }]}>
+        <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>
+          {t('workerProfile.reviews')} ({reviews.length})
+        </Text>
+        {reviews.length === 0 ? (
+          <Text style={[styles.sectionText, { color: colors.textSecondary }]}>
+            {t('workerProfile.noReviews')}
+          </Text>
+        ) : (
+          reviews.slice(0, visibleCount).map((r) => (
+            <View key={r.id} style={styles.reviewItem}>
+              <View style={styles.reviewHead}>
+                <Text style={[styles.reviewName, { color: colors.textPrimary }]}>
+                  {r.userName || '—'}
+                </Text>
+                <View style={styles.reviewStars}>
+                  {[1, 2, 3, 4, 5].map((s) => (
+                    <Text
+                      key={s}
+                      style={[
+                        styles.reviewStar,
+                        { color: s <= r.rating ? '#f5a623' : colors.textSecondary },
+                      ]}
+                    >
+                      ★
+                    </Text>
+                  ))}
+                </View>
+              </View>
+              {r.text ? (
+                <Text style={[styles.reviewText, { color: colors.textSecondary }]}>{r.text}</Text>
+              ) : null}
+            </View>
+          ))
+        )}
+        {visibleCount < reviews.length && (
+          <Pressable
+            style={[styles.loadMoreBtn, { backgroundColor: colors.accent }]}
+            onPress={() => setVisibleCount((c) => c + REVIEWS_PER_PAGE)}
+          >
+            <Text style={styles.loadMoreText}>{t('workerProfile.loadMore')}</Text>
+          </Pressable>
+        )}
+      </View>
+
       <Pressable
         style={[styles.chatBtn, { backgroundColor: colors.accent }]}
         onPress={handleChat}
@@ -238,6 +293,43 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 6,
+  },
+  reviewItem: {
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(128,128,128,0.15)',
+  },
+  reviewHead: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  reviewName: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  reviewStars: {
+    flexDirection: 'row',
+  },
+  reviewStar: {
+    fontSize: 14,
+    marginLeft: 1,
+  },
+  reviewText: {
+    fontSize: 13,
+    marginTop: 4,
+    lineHeight: 18,
+  },
+  loadMoreBtn: {
+    marginTop: 14,
+    paddingVertical: 11,
+    borderRadius: 20,
+    alignItems: 'center',
+  },
+  loadMoreText: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontWeight: '600',
   },
   dayName: {
     fontSize: 14,

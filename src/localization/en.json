@@ -128,7 +128,8 @@
     "availableNow": "Available now",
     "notAvailable": "Not available",
     "availabilityHint": "When off, you won't appear in search results",
-    "ratingPlaceholder": "Rating coming soon",
+    "ratingPlaceholder": "No ratings yet",
+    "ratingWithCount": "★ {{avg}} ({{count}})",
     "chatsTitle": "Chats",
     "chatsEmpty": "No chats yet — when customers contact you, they will show up here.",
     "profileTitle": "Your profile",
@@ -253,7 +254,10 @@
     "chat": "Chat",
     "chatting": "Opening conversation...",
     "chatTitle": "Conversation",
-    "chatComingSoon": "Chat will be available in a later task."
+    "chatComingSoon": "Chat will be available in a later task.",
+    "reviews": "Reviews",
+    "noReviews": "No reviews yet.",
+    "loadMore": "Load more"
   },
   "chat": {
     "conversations": "Chats",

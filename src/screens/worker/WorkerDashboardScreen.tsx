@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTheme } from '../../context/ThemeContext';
 import { useApp } from '../../context/AppContext';
@@ -32,22 +32,34 @@ export default function WorkerDashboardScreen() {
   const [loading, setLoading] = useState(true);
   const [toggling, setToggling] = useState(false);
 
+  const loadProfile = useCallback(async (onDone?: () => void) => {
+    const uid = getCurrentUserId();
+    if (uid) {
+      const p = await getWorkerProfile(uid);
+      setProfile(p);
+    } else {
+      markWorkerOnboarded();
+    }
+    onDone?.();
+  }, [markWorkerOnboarded]);
+
   useEffect(() => {
     let mounted = true;
-    (async () => {
-      const uid = getCurrentUserId();
-      if (uid) {
-        const p = await getWorkerProfile(uid);
-        if (mounted) setProfile(p);
-      } else {
-        markWorkerOnboarded();
-      }
+    loadProfile(() => {
       if (mounted) setLoading(false);
-    })();
+    });
     return () => {
       mounted = false;
     };
-  }, [markWorkerOnboarded]);
+  }, [loadProfile]);
+
+  useFocusEffect(
+    useCallback(() => {
+      // Refresh so live ratingAvg/ratingCount (and other data) reflect newly
+      // submitted reviews whenever the dashboard regains focus.
+      loadProfile();
+    }, [loadProfile]),
+  );
 
   const toggleAvailability = useCallback(async () => {
     if (toggling || !profile) return;
@@ -92,7 +104,12 @@ export default function WorkerDashboardScreen() {
 
         <View style={styles.ratingRow}>
           <Text style={[styles.ratingText, { color: colors.textSecondary }]}>
-            {t('workerDashboard.ratingPlaceholder')}
+            {profile && profile.ratingCount > 0
+              ? t('workerDashboard.ratingWithCount', {
+                  avg: profile.ratingAvg.toFixed(1),
+                  count: profile.ratingCount,
+                })
+              : t('workerDashboard.ratingPlaceholder')}
           </Text>
         </View>
 

@@ -128,7 +128,8 @@
     "availableNow": "متاح الآن",
     "notAvailable": "غير متاح",
     "availabilityHint": "عند إيقاف التوفر لن تظهر في نتائج البحث",
-    "ratingPlaceholder": "التقييم متاح قريبًا",
+    "ratingPlaceholder": "لا تقييمات بعد",
+    "ratingWithCount": "★ {{avg}} ({{count}})",
     "chatsTitle": "المحادثات",
     "chatsEmpty": "لا توجد محادثات بعد — عندما يتواصل معك عملاء ستظهر هنا.",
     "profileTitle": "ملفك الشخصي",
@@ -253,7 +254,10 @@
     "chat": "دردشة",
     "chatting": "جارٍ تحميل المحادثة...",
     "chatTitle": "المحادثة",
-    "chatComingSoon": "المحادثات ستتوفر في مهمة لاحقة."
+    "chatComingSoon": "المحادثات ستتوفر في مهمة لاحقة.",
+    "reviews": "التقييمات",
+    "noReviews": "لا توجد تقييمات بعد.",
+    "loadMore": "عرض المزيد"
   },
   "chat": {
     "conversations": "المحادثات",
