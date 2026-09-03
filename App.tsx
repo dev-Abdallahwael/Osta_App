@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
+import { isRunningInExpoGo } from 'expo';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ensureAnonymousSignIn, onAuthChange } from './src/services/auth';
-import { registerForPushNotifications } from './src/services/notifications';
 import { LanguageProvider } from './src/context/LanguageContext';
 import { ThemeProvider, useTheme } from './src/context/ThemeContext';
 import { AppProvider, useApp } from './src/context/AppContext';
@@ -16,12 +16,15 @@ function Root() {
   useEffect(() => {
     const onboarded =
       role === 'worker' ? workerOnboarded : role === 'user' ? userOnboarded : false;
-    if (!role || !onboarded || isBooting) return;
+    // Expo Go does not include Android remote push notification support.
+    if (!role || !onboarded || isBooting || isRunningInExpoGo()) return;
     let unsub: (() => void) | null = null;
     const registered = { done: false };
     unsub = onAuthChange((user) => {
       if (user && !registered.done) {
-        registerForPushNotifications(role).finally(() => {
+        import('./src/services/notifications').then(({ registerForPushNotifications }) =>
+          registerForPushNotifications(role),
+        ).finally(() => {
           registered.done = true;
         });
       }
