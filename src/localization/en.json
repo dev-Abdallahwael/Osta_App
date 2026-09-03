@@ -295,5 +295,19 @@
     "roleWorker": "Service provider",
     "roleUser": "Service seeker"
   },
+  "boost": {
+    "title": "Boost my listing",
+    "error": "Something went wrong while loading your boost status. Please try again.",
+    "activeTitle": "Your listing is boosted",
+    "activeUntil": "Featured until {{date}}",
+    "activePermanent": "Featured permanently",
+    "pendingTitle": "Boost request received",
+    "pendingBody": "We've received your request. Once we confirm your payment off-app, we'll activate your boost and you'll appear at the top of search results.",
+    "availableTitle": "Get more visibility",
+    "availableBody": "Boost your listing to appear at the top of search results with a Featured badge. It's a manual process — send us your request and we'll confirm your payment off-app before activating it.",
+    "requestBtn": "Request boost",
+    "howTitle": "How it works",
+    "howBody": "1. Request a boost here.\n2. We contact you to arrange payment (bank transfer / Instapay / cash).\n3. After confirmation, we activate your featured listing from the console and you'll rank higher in results."
+  },
   "switchAccount": "Switch account"
 }

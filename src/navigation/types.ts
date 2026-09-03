@@ -8,6 +8,7 @@ export type RootStackParamList = {
   Main: NavigatorScreenParams<MainTabParamList> | undefined;
   WorkerOnboarding: { edit?: boolean } | undefined;
   UserOnboarding: undefined;
+  WorkerBoost: undefined;
 };
 
 export type MainTabParamList = {

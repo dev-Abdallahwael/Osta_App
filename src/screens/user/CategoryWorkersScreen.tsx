@@ -76,9 +76,16 @@ export default function CategoryWorkersScreen({ route }: Props) {
 
   const displayed = useCallback(() => {
     const list = inRange.length > 0 ? [...inRange] : [...nearest];
+    const featuredKey = (h: WorkerSearchHit) => {
+      if (!h.isFeatured) return 0;
+      if (!h.featuredUntil) return 1;
+      return h.featuredUntil.seconds * 1000 > Date.now() ? 1 : 0;
+    };
     if (sortBy === 'rating') list.sort((a, b) => b.ratingAvg - a.ratingAvg);
-    else if (sortBy === 'price') list.sort((a, b) => a.price - b.price || a.distanceKm - b.distanceKm);
+    else if (sortBy === 'price')
+      list.sort((a, b) => a.price - b.price || a.distanceKm - b.distanceKm);
     else list.sort((a, b) => a.distanceKm - b.distanceKm);
+    list.sort((a, b) => featuredKey(b) - featuredKey(a));
     return list;
   }, [inRange, nearest, sortBy]);
 

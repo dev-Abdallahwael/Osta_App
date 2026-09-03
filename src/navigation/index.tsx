@@ -8,6 +8,7 @@ import LoginScreen from '../screens/LoginScreen';
 import MainTabs from './MainTabs';
 import WorkerOnboardingNavigator from './WorkerOnboardingNavigator';
 import UserOnboardingNavigator from './UserOnboardingNavigator';
+import BoostScreen from '../screens/worker/BoostScreen';
 import type { RootStackParamList } from './types';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -59,6 +60,11 @@ export default function AppNavigator() {
           name="UserOnboarding"
           component={UserOnboardingNavigator}
           options={{ headerShown: false }}
+        />
+        <RootStack.Screen
+          name="WorkerBoost"
+          component={BoostScreen}
+          options={{ title: '' }}
         />
       </RootStack.Navigator>
     </NavigationContainer>

@@ -123,6 +123,7 @@ export interface WorkerProfile {
   isHidden: boolean;
   isFeatured: boolean;
   featuredUntil: { seconds: number; nanoseconds: number } | null;
+  boostRequested: boolean;
   ratingAvg: number;
   ratingCount: number;
   categories: { categoryId: string; startingPrice: number }[];
@@ -143,6 +144,17 @@ export async function setWorkerAvailability(
   await setDoc(
     doc(db, 'workers', workerId),
     { isAvailable },
+    { merge: true },
+  );
+}
+
+export async function requestBoost(workerId: string): Promise<void> {
+  if (!hasConfig || !db) {
+    throw new Error('Firebase not configured');
+  }
+  await setDoc(
+    doc(db, 'workers', workerId),
+    { boostRequested: true },
     { merge: true },
   );
 }
@@ -175,6 +187,7 @@ export async function getWorkerProfile(workerId: string): Promise<WorkerProfile 
     featuredUntil: d.featuredUntil
       ? { seconds: Number(d.featuredUntil.seconds ?? 0), nanoseconds: Number(d.featuredUntil.nanoseconds ?? 0) }
       : null,
+    boostRequested: Boolean(d.boostRequested),
     ratingAvg: Number(d.ratingAvg ?? 0),
     ratingCount: Number(d.ratingCount ?? 0),
     categories: Array.isArray(d.categories) ? d.categories : [],
@@ -285,6 +298,7 @@ export async function searchWorkers(
       featuredUntil: d.featuredUntil
         ? { seconds: Number(d.featuredUntil.seconds ?? 0), nanoseconds: Number(d.featuredUntil.nanoseconds ?? 0) }
         : null,
+      boostRequested: Boolean(d.boostRequested),
       ratingAvg: Number(d.ratingAvg ?? 0),
       ratingCount: Number(d.ratingCount ?? 0),
       categories: Array.isArray(d.categories) ? d.categories : [],
@@ -305,7 +319,15 @@ export async function searchWorkers(
   }
 
   const sortBy = options.sortBy ?? 'distance';
+  const featuredKey = (h: WorkerSearchHit) => {
+    if (!h.isFeatured) return 0;
+    if (!h.featuredUntil) return 1;
+    return h.featuredUntil.seconds * 1000 > Date.now() ? 1 : 0;
+  };
   const sortFn = (a: WorkerSearchHit, b: WorkerSearchHit) => {
+    const fa = featuredKey(a);
+    const fb = featuredKey(b);
+    if (fa !== fb) return fb - fa;
     if (sortBy === 'rating') return b.ratingAvg - a.ratingAvg;
     if (sortBy === 'price') return a.price - b.price || a.distanceKm - b.distanceKm;
     return a.distanceKm - b.distanceKm;
@@ -314,7 +336,7 @@ export async function searchWorkers(
   const inRange = hits.filter((h) => h.inRange).sort(sortFn);
   const nearest = hits
     .filter((h) => !h.inRange)
-    .sort((a, b) => a.distanceKm - b.distanceKm);
+    .sort((a, b) => featuredKey(b) - featuredKey(a) || a.distanceKm - b.distanceKm);
 
   return { inRange, nearest };
 }

@@ -198,7 +198,7 @@ export default function WorkerDashboardScreen() {
         </Pressable>
         <Pressable
           style={[styles.actionBtn, { backgroundColor: colors.surface, borderColor: colors.accent, borderWidth: 2 }]}
-          onPress={() => Alert.alert(t('workerDashboard.comingSoonTitle'), t('workerDashboard.boostComingSoon'))}
+          onPress={() => navigation.navigate('WorkerBoost')}
         >
           <Text style={[styles.actionText, { color: colors.accent }]}>
             {t('workerDashboard.boost')}
