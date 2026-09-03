@@ -5,13 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTheme } from '../context/ThemeContext';
 import { useApp } from '../context/AppContext';
-import { signInWithEmailPassword } from '../services/auth';
 import type { RootStackParamList } from '../navigation/types';
-
-const TEST_ACCOUNTS = {
-  worker: { email: 'worker@test.com', password: '123456789' },
-  user: { email: 'test@test.com', password: '123456789' },
-} as const;
 
 export default function RoleSelectScreen() {
   const { t } = useTranslation();
@@ -21,13 +15,10 @@ export default function RoleSelectScreen() {
   const [busy, setBusy] = useState<null | 'worker' | 'user'>(null);
 
   async function chooseRole(role: 'worker' | 'user') {
+    // Each device gets its own identity via anonymous sign-in (App.tsx),
+    // so role selection does not log into any shared account.
     setBusy(role);
     try {
-      await signInWithEmailPassword(TEST_ACCOUNTS[role].email, TEST_ACCOUNTS[role].password);
-      await completeOnboarding(role);
-    } catch (err) {
-      console.warn('Dev login failed:', err);
-      // Fall back to anonymous identity then complete onboarding.
       await completeOnboarding(role);
     } finally {
       setBusy(null);
