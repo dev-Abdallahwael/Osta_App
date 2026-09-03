@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -19,6 +20,7 @@ import { useApp } from '../../context/AppContext';
 import type { HomeStackParamList } from '../../navigation/types';
 import { getCurrentUserId } from '../../services/auth';
 import { sendMessage, subscribeToChat, type ChatMessage } from '../../services/chat';
+import { createReport } from '../../services/report';
 
 type Props = NativeStackScreenProps<HomeStackParamList, 'Chat'>;
 
@@ -71,6 +73,32 @@ export default function ChatThreadScreen({ route }: Props) {
     }
   }
 
+  function handleReport() {
+    const reasons = [
+      t('report.reasonSpam'),
+      t('report.reasonHarassment'),
+      t('report.reasonInappropriate'),
+      t('report.reasonOther'),
+    ];
+    Alert.alert(t('report.title'), t('report.body'), [
+      ...reasons.map((reason) => ({
+        text: reason,
+        onPress: () => submitReport(reason),
+      })),
+      { text: t('report.cancel'), style: 'cancel' as const },
+    ]);
+  }
+
+  async function submitReport(reason: string) {
+    try {
+      await createReport('chat', route.params.chatId, reason);
+      Alert.alert(t('report.sentTitle'), t('report.sentBody'));
+    } catch (err) {
+      console.warn('report failed:', err);
+      Alert.alert(t('report.failTitle'), t('report.failBody'));
+    }
+  }
+
   return (
     <KeyboardAvoidingView
       style={[styles.container, { backgroundColor: colors.background }]}
@@ -100,6 +128,10 @@ export default function ChatThreadScreen({ route }: Props) {
           </Pressable>
         </View>
       )}
+
+      <Pressable style={styles.reportLink} onPress={handleReport}>
+        <Text style={[styles.reportText, { color: '#d32f2f' }]}>{t('report.report')}</Text>
+      </Pressable>
 
       {loading ? (
         <ActivityIndicator color={colors.accent} style={{ marginTop: 30 }} />
@@ -191,6 +223,14 @@ const styles = StyleSheet.create({
   promptBtnText: {
     color: '#ffffff',
     fontSize: 14,
+    fontWeight: '600',
+  },
+  reportLink: {
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  reportText: {
+    fontSize: 13,
     fontWeight: '600',
   },
   thread: {

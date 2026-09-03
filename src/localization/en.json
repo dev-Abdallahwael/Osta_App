@@ -257,7 +257,8 @@
     "chatComingSoon": "Chat will be available in a later task.",
     "reviews": "Reviews",
     "noReviews": "No reviews yet.",
-    "loadMore": "Load more"
+    "loadMore": "Load more",
+    "hidden": "This profile is unavailable."
   },
   "chat": {
     "conversations": "Chats",
@@ -308,6 +309,21 @@
     "requestBtn": "Request boost",
     "howTitle": "How it works",
     "howBody": "1. Request a boost here.\n2. We contact you to arrange payment (bank transfer / Instapay / cash).\n3. After confirmation, we activate your featured listing from the console and you'll rank higher in results."
+  },
+  "report": {
+    "report": "Report",
+    "title": "Report",
+    "body": "Why are you reporting this?",
+    "cancel": "Cancel",
+    "reasonFake": "Fake profile",
+    "reasonSpam": "Spam",
+    "reasonHarassment": "Harassment",
+    "reasonInappropriate": "Inappropriate content",
+    "reasonOther": "Other",
+    "sentTitle": "Report sent",
+    "sentBody": "Thank you. Our team will review your report.",
+    "failTitle": "Couldn't send report",
+    "failBody": "An error occurred while sending your report. Please try again."
   },
   "switchAccount": "Switch account"
 }

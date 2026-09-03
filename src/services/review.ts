@@ -77,16 +77,18 @@ export async function getWorkerReviews(workerId: string): Promise<Review[]> {
   const snap = await getDocs(
     query(collection(db, 'workers', workerId, 'reviews'), orderBy('createdAt', 'desc')),
   );
-  return snap.docs.map((d) => {
-    const data = d.data();
-    return {
-      id: d.id,
-      workerId: String(data.workerId ?? ''),
-      userId: String(data.userId ?? ''),
-      userName: String(data.userName ?? ''),
-      rating: Number(data.rating ?? 0),
-      text: String(data.text ?? ''),
-      createdAt: data.createdAt ? (data.createdAt as Timestamp) : null,
-    };
-  });
+  return snap.docs
+    .filter((d) => d.data().isHidden !== true)
+    .map((d) => {
+      const data = d.data();
+      return {
+        id: d.id,
+        workerId: String(data.workerId ?? ''),
+        userId: String(data.userId ?? ''),
+        userName: String(data.userName ?? ''),
+        rating: Number(data.rating ?? 0),
+        text: String(data.text ?? ''),
+        createdAt: data.createdAt ? (data.createdAt as Timestamp) : null,
+      };
+    });
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -10,6 +10,7 @@ import { getWorkerProfile, type WorkerProfile } from '../../services/worker';
 import { getOrCreateChat } from '../../services/chat';
 import { getWorkerReviews, type Review } from '../../services/review';
 import { getCurrentUserId } from '../../services/auth';
+import { createReport } from '../../services/report';
 import UserAvatar from '../../components/UserAvatar';
 
 type Props = NativeStackScreenProps<HomeStackParamList, 'WorkerProfile'>;
@@ -68,6 +69,14 @@ export default function WorkerProfileScreen({ route }: Props) {
     );
   }
 
+  if (worker.isHidden) {
+    return (
+      <View style={[styles.center, { backgroundColor: colors.background }]}>
+        <Text style={{ color: colors.textSecondary }}>{t('workerProfile.hidden')}</Text>
+      </View>
+    );
+  }
+
   const categories = CATEGORIES.map((c) => {
     const entry = worker.categories.find((x) => x.categoryId === c.id);
     return entry ? { id: c.id, icon: c.icon, nameKey: c.nameKey, price: entry.startingPrice } : null;
@@ -95,6 +104,32 @@ export default function WorkerProfileScreen({ route }: Props) {
       console.warn('open chat failed:', err);
     } finally {
       setChatting(false);
+    }
+  }
+
+  function handleReport() {
+    const reasons = [
+      t('report.reasonFake'),
+      t('report.reasonSpam'),
+      t('report.reasonInappropriate'),
+      t('report.reasonOther'),
+    ];
+    Alert.alert(t('report.title'), t('report.body'), [
+      ...reasons.map((reason) => ({
+        text: reason,
+        onPress: () => submitReport('worker', route.params.workerId, reason),
+      })),
+      { text: t('report.cancel'), style: 'cancel' as const },
+    ]);
+  }
+
+  async function submitReport(targetType: 'worker' | 'chat', targetId: string, reason: string) {
+    try {
+      await createReport(targetType, targetId, reason);
+      Alert.alert(t('report.sentTitle'), t('report.sentBody'));
+    } catch (err) {
+      console.warn('report failed:', err);
+      Alert.alert(t('report.failTitle'), t('report.failBody'));
     }
   }
 
@@ -222,6 +257,10 @@ export default function WorkerProfileScreen({ route }: Props) {
           {chatting ? t('workerProfile.chatting') : t('workerProfile.chat')}
         </Text>
       </Pressable>
+
+      <Pressable style={styles.reportBtn} onPress={handleReport}>
+        <Text style={[styles.reportText, { color: '#d32f2f' }]}>{t('report.report')}</Text>
+      </Pressable>
     </ScrollView>
   );
 }
@@ -339,9 +378,18 @@ const styles = StyleSheet.create({
   },
   chatBtn: {
     marginTop: 20,
-    paddingVertical: 15,
-    borderRadius: 24,
+    paddingVertical: 14,
+    borderRadius: 22,
     alignItems: 'center',
+  },
+  reportBtn: {
+    marginTop: 12,
+    paddingVertical: 8,
+    alignItems: 'center',
+  },
+  reportText: {
+    fontSize: 14,
+    fontWeight: '600',
   },
   chatText: {
     color: '#ffffff',
