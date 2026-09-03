@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../context/ThemeContext';
 import { useApp } from '../context/AppContext';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { MainTabParamList, HomeStackParamList } from './types';
 import UserHomeScreen from '../screens/user/UserHomeScreen';
 import CategoryWorkersScreen from '../screens/user/CategoryWorkersScreen';
@@ -36,8 +37,16 @@ function TabIcon({ route, focused }: { route: string; focused: boolean }) {
 
 function HomeStackNavigator() {
   const { role } = useApp();
+  const { colors } = useTheme();
   return (
-    <HomeStack.Navigator>
+    <HomeStack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: colors.surface },
+        headerTintColor: colors.textPrimary,
+        headerTitleStyle: { fontWeight: '700' },
+        headerShadowVisible: false,
+      }}
+    >
       <HomeStack.Screen
         name="HomeScreen"
         component={role === 'worker' ? WorkerDashboardScreen : UserHomeScreen}
@@ -75,6 +84,7 @@ function HomeStackNavigator() {
 export default function MainTabs() {
   const { t } = useTranslation();
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -82,7 +92,17 @@ export default function MainTabs() {
         tabBarIcon: ({ focused }) => <TabIcon route={route.name} focused={focused} />,
         tabBarActiveTintColor: colors.accent,
         tabBarInactiveTintColor: colors.textSecondary,
-        tabBarStyle: { backgroundColor: colors.surface, borderTopColor: colors.border },
+        tabBarStyle: {
+          backgroundColor: colors.surface,
+          borderTopColor: colors.border,
+          borderTopWidth: 1,
+          height: 64 + insets.bottom,
+          paddingTop: 8,
+          paddingBottom: insets.bottom + 8,
+          elevation: 0,
+        },
+        tabBarLabelStyle: { fontSize: 11, fontWeight: '700' },
+        tabBarItemStyle: { borderRadius: 14, marginHorizontal: 8 },
       })}
     >
       <Tab.Screen name="Home" component={HomeStackNavigator} options={{ title: t('tabs.home') }} />

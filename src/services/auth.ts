@@ -39,6 +39,10 @@ export function getCurrentUserId(): string | null {
   return auth?.currentUser?.uid ?? null;
 }
 
+export function getCurrentUserEmail(): string | null {
+  return auth?.currentUser?.email ?? null;
+}
+
 export async function createAccount(email: string, password: string): Promise<User> {
   if (!hasConfig || !auth) {
     throw new Error('Firebase not configured');

@@ -107,7 +107,12 @@
       "emailPlaceholder": "Email ending in .com",
       "passwordPlaceholder": "Password",
       "confirmPasswordPlaceholder": "Confirm password",
-      "validation": "Use a valid .com email, a password of at least 6 characters, and matching passwords."
+      "validation": "Use a valid .com email, a password of at least 6 characters, and matching passwords.",
+      "emailError": "Enter a valid email ending in .com.",
+      "passwordError": "Password must be at least 6 characters.",
+      "confirmPasswordError": "Passwords do not match.",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password"
     },
     "review": {
       "title": "Review your request",
@@ -226,6 +231,19 @@
       "locationErrorBody": "Something went wrong while detecting your location. Please try again.",
       "submitErrorTitle": "Couldn't save",
       "submitErrorBody": "Something went wrong while saving your details. Try again."
+    },
+    "account": {
+      "title": "Create your account",
+      "hint": "Use these details to log in later",
+      "emailPlaceholder": "Email ending in .com",
+      "passwordPlaceholder": "Password",
+      "confirmPasswordPlaceholder": "Confirm password",
+      "validation": "Use a valid .com email, a password of at least 6 characters, and matching passwords.",
+      "emailError": "Enter a valid email ending in .com.",
+      "passwordError": "Password must be at least 6 characters.",
+      "confirmPasswordError": "Passwords do not match.",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password"
     }
   },
   "userHome": {
@@ -305,7 +323,11 @@
     "title": "Your profile",
     "anonymous": "User",
     "roleWorker": "Service provider",
-    "roleUser": "Service seeker"
+    "roleUser": "Service seeker",
+    "phone": "Phone",
+    "email": "Email",
+    "password": "Password",
+    "notSet": "Not set"
   },
   "boost": {
     "title": "Boost my listing",

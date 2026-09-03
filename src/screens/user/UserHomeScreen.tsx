@@ -15,12 +15,14 @@ import { useTheme } from '../../context/ThemeContext';
 import { useApp } from '../../context/AppContext';
 import { CATEGORIES } from '../../data/categories';
 import type { HomeStackParamList } from '../../navigation/types';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function UserHomeScreen() {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
   const { clearRole } = useApp();
+  const insets = useSafeAreaInsets();
   const [query, setQuery] = useState('');
 
   const filtered = useMemo(() => {
@@ -31,7 +33,7 @@ export default function UserHomeScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top + 18 }]}>
         <View style={styles.headerTop}>
           <View>
             <Text style={[styles.greeting, { color: colors.textSecondary }]}>
@@ -145,8 +147,13 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderRadius: 16,
     borderWidth: 1,
-    paddingVertical: 20,
+    paddingVertical: 22,
     alignItems: 'center',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
   },
   cardIcon: {
     fontSize: 32,

@@ -3,17 +3,20 @@ import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-nati
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../context/ThemeContext';
 import { useApp } from '../context/AppContext';
-import { getCurrentUserId } from '../services/auth';
+import { getCurrentUserEmail, getCurrentUserId } from '../services/auth';
 import { getWorkerProfile } from '../services/worker';
 import { getUserProfile } from '../services/user';
 import UserAvatar from '../components/UserAvatar';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function ProfileScreen() {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const { role, clearRole } = useApp();
+  const insets = useSafeAreaInsets();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [photo, setPhoto] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -25,6 +28,7 @@ export default function ProfileScreen() {
     setError(false);
     (async () => {
       const uid = getCurrentUserId();
+      const currentEmail = getCurrentUserEmail() ?? '';
       if (!uid) {
         if (mounted) setLoading(false);
         return;
@@ -46,6 +50,7 @@ export default function ProfileScreen() {
         if (mounted) {
           setName(profileName);
           setPhone(profilePhone);
+          setEmail(currentEmail);
           setPhoto(profilePhoto);
           setLoading(false);
         }
@@ -63,7 +68,7 @@ export default function ProfileScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.title, { color: colors.textPrimary }]}>{t('profile.title')}</Text>
+      <Text style={[styles.title, { color: colors.textPrimary, marginTop: insets.top + 8 }]}>{t('profile.title')}</Text>
 
       {loading ? (
         <ActivityIndicator color={colors.accent} style={{ marginTop: 40 }} />
@@ -91,8 +96,18 @@ export default function ProfileScreen() {
             </Text>
           </View>
           {phone ? (
-            <Text style={[styles.phone, { color: colors.textSecondary }]}>{phone}</Text>
+            <Text style={[styles.detail, { color: colors.textSecondary }]}>
+              {t('profile.phone')}: {phone}
+            </Text>
           ) : null}
+          <View style={styles.credentials}>
+            <Text style={[styles.detail, { color: colors.textSecondary }]}>
+              {t('profile.email')}: {email || t('profile.notSet')}
+            </Text>
+            <Text style={[styles.detail, { color: colors.textSecondary }]}>
+              {t('profile.password')}: {email ? '********' : t('profile.notSet')}
+            </Text>
+          </View>
         </View>
       )}
 
@@ -109,7 +124,6 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
     paddingHorizontal: 20,
   },
   title: {
@@ -123,6 +137,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingVertical: 24,
     paddingHorizontal: 16,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.06,
+    shadowRadius: 12,
+    elevation: 2,
   },
   name: {
     fontSize: 20,
@@ -139,9 +158,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-  phone: {
+  detail: {
     fontSize: 15,
     marginTop: 10,
+  },
+  credentials: {
+    alignSelf: 'stretch',
+    marginTop: 8,
+    paddingTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: '#e5e7eb',
   },
   retryBtn: {
     marginTop: 8,

@@ -80,6 +80,7 @@ export async function submitWorkerProfile(
 
   const workerPayload: Record<string, unknown> = {
     uid,
+    accountType: 'worker',
     name: data.name,
     phone: '+20' + data.phone,
     photoURL,
@@ -116,6 +117,7 @@ export async function submitWorkerProfile(
 
 export interface WorkerProfile {
   uid: string;
+  accountType?: 'worker';
   name: string;
   phone: string;
   photoURL: string;
@@ -178,6 +180,7 @@ export async function getWorkerProfile(workerId: string): Promise<WorkerProfile 
   >;
   return {
     uid: d.uid ?? workerId,
+    accountType: d.accountType === 'worker' ? 'worker' : undefined,
     name: String(d.name ?? ''),
     phone: String(d.phone ?? ''),
     photoURL: String(d.photoURL ?? ''),
@@ -289,6 +292,7 @@ export async function searchWorkers(
 
     hits.push({
       uid: d.uid ?? snap.id,
+      accountType: d.accountType === 'worker' ? 'worker' : undefined,
       name: String(d.name ?? ''),
       phone: String(d.phone ?? ''),
       photoURL: String(d.photoURL ?? ''),

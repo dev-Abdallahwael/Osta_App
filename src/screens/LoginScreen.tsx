@@ -16,6 +16,7 @@ import { useTheme } from '../context/ThemeContext';
 import { useApp } from '../context/AppContext';
 import { getCurrentUserId, signInWithEmailPassword } from '../services/auth';
 import { getWorkerProfile } from '../services/worker';
+import { getUserProfile } from '../services/user';
 import type { RootStackParamList } from '../navigation/types';
 import type { Role } from '../navigation/types';
 
@@ -25,7 +26,7 @@ export default function LoginScreen() {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const navigation = useNavigation<Nav>();
-  const { completeOnboarding } = useApp();
+  const { completeOnboarding, markWorkerOnboarded, markUserOnboarded } = useApp();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
@@ -33,7 +34,28 @@ export default function LoginScreen() {
 
   async function roleForSignedInUser(): Promise<Role> {
     const uid = getCurrentUserId();
-    if (uid && (await getWorkerProfile(uid))) {
+    if (!uid) {
+      return 'user';
+    }
+
+    const [workerProfile, userProfile] = await Promise.all([
+      getWorkerProfile(uid),
+      getUserProfile(uid),
+    ]);
+
+    if (workerProfile?.accountType === 'worker') {
+      return 'worker';
+    }
+    if (userProfile?.accountType === 'user') {
+      return 'user';
+    }
+
+    // Existing accounts can have both documents because older versions did
+    // not store an account type. A user profile is the safer fallback there.
+    if (userProfile && !workerProfile) {
+      return 'user';
+    }
+    if (workerProfile && !userProfile) {
       return 'worker';
     }
     return 'user';
@@ -49,6 +71,11 @@ export default function LoginScreen() {
     try {
       await signInWithEmailPassword(email.trim(), password);
       const role = await roleForSignedInUser();
+      if (role === 'worker') {
+        await markWorkerOnboarded();
+      } else {
+        await markUserOnboarded();
+      }
       await completeOnboarding(role);
     } catch (err) {
       console.warn('Login failed:', err);

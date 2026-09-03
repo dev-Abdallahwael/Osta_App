@@ -282,6 +282,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 12,
     marginBottom: 12,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
   },
   cardBody: {
     flex: 1,

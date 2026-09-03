@@ -2,16 +2,18 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../context/ThemeContext';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import LanguageToggle from '../components/LanguageToggle';
 import ThemeToggle from '../components/ThemeToggle';
 
 export default function SettingsScreen() {
   const { t } = useTranslation();
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.title, { color: colors.textPrimary }]}>{t('settings.title')}</Text>
+      <Text style={[styles.title, { color: colors.textPrimary, marginTop: insets.top + 8 }]}>{t('settings.title')}</Text>
 
       <View style={[styles.section, { backgroundColor: colors.surface, borderColor: colors.border }]}>
         <Text style={[styles.label, { color: colors.textPrimary }]}>
@@ -39,7 +41,6 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 60,
     paddingHorizontal: 20,
   },
   title: {
@@ -52,6 +53,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 18,
     marginBottom: 16,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
   },
   label: {
     fontSize: 16,

@@ -37,14 +37,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     let mounted = true;
     (async () => {
       try {
-        const [stored, wOnboarded, uOnboarded] = await Promise.all([
-          AsyncStorage.getItem(ROLE_KEY),
+        const [wOnboarded, uOnboarded] = await Promise.all([
           AsyncStorage.getItem(WORKER_ONBOARDED_KEY),
           AsyncStorage.getItem(USER_ONBOARDED_KEY),
         ]);
-        if (mounted && (stored === 'worker' || stored === 'user')) {
-          setRole(stored);
-        }
         if (mounted && wOnboarded === '1') {
           setWorkerOnboarded(true);
         }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   Alert,
   Pressable,
@@ -8,6 +8,8 @@ import {
   View,
   KeyboardAvoidingView,
   Platform,
+  Animated,
+  Easing,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../context/ThemeContext';
@@ -15,6 +17,7 @@ import { useWorkerOnboarding } from '../context/WorkerOnboardingContext';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { WorkerOnboardingParamList } from '../navigation/types';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Nav = NativeStackNavigationProp<WorkerOnboardingParamList>;
 
@@ -50,6 +53,27 @@ export default function OnboardingLayout({
   const { colors } = useTheme();
   const navigation = useNavigation<Nav>();
   const { edit } = useWorkerOnboarding();
+  const insets = useSafeAreaInsets();
+  const contentOffset = useRef(new Animated.Value(6)).current;
+  const contentOpacity = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    contentOffset.setValue(6);
+    contentOpacity.setValue(0);
+    Animated.parallel([
+      Animated.timing(contentOffset, {
+        toValue: 0,
+        duration: 180,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: true,
+      }),
+      Animated.timing(contentOpacity, {
+        toValue: 1,
+        duration: 180,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [contentOffset, contentOpacity, step]);
 
   function handleBack() {
     if (navigation.canGoBack()) {
@@ -92,7 +116,7 @@ export default function OnboardingLayout({
       style={[styles.flex, { backgroundColor: colors.background }]}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
         <Pressable onPress={handleBack} hitSlop={12} style={styles.backBtn}>
           <Text style={[styles.backText, { color: colors.accent }]}>‹</Text>
         </Pressable>
@@ -102,9 +126,17 @@ export default function OnboardingLayout({
         <View style={styles.backSpacer} />
       </View>
 
-      {content}
+      <View style={[styles.progressTrack, { backgroundColor: colors.border }]}>
+        <View
+          style={[styles.progressFill, { backgroundColor: colors.accent, width: `${(step / total) * 100}%` }]}
+        />
+      </View>
 
-      <View style={[styles.footer, { borderTopColor: colors.border }]}>
+      <Animated.View style={[styles.animatedContent, { opacity: contentOpacity, transform: [{ translateY: contentOffset }] }]}>
+        {content}
+      </Animated.View>
+
+      <View style={[styles.footer, { borderTopColor: colors.border, paddingBottom: insets.bottom + 12 }]}>
         <Pressable
           style={[
             styles.continueBtn,
@@ -141,7 +173,6 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 60,
     paddingHorizontal: 20,
     paddingBottom: 12,
   },
@@ -163,6 +194,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 15,
     fontWeight: '600',
+  },
+  progressTrack: {
+    height: 4,
+    marginHorizontal: 20,
+    borderRadius: 2,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    borderRadius: 2,
+  },
+  animatedContent: {
+    flex: 1,
   },
   heading: {
     marginBottom: 18,
@@ -186,6 +230,11 @@ const styles = StyleSheet.create({
   footer: {
     padding: 16,
     borderTopWidth: 1,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: -3 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 4,
   },
   continueBtn: {
     paddingVertical: 15,

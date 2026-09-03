@@ -10,6 +10,7 @@ export interface UserOnboardingData {
 
 export interface UserProfile {
   uid: string;
+  accountType?: 'user';
   name: string;
   phone: string;
   defaultLocation: { lat: number; lng: number; address: string; city: string } | null;
@@ -26,6 +27,7 @@ export async function submitUserProfile(data: UserOnboardingData): Promise<strin
 
   const payload = {
     uid,
+    accountType: 'user',
     name: data.name,
     phone: '+20' + data.phone,
     defaultLocation: data.location
@@ -57,6 +59,7 @@ export async function getUserProfile(userId: string): Promise<UserProfile | null
     | null;
   return {
     uid: d.uid ?? userId,
+    accountType: d.accountType === 'user' ? 'user' : undefined,
     name: String(d.name ?? ''),
     phone: String(d.phone ?? ''),
     defaultLocation: loc

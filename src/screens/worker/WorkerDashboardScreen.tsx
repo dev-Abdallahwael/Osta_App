@@ -22,12 +22,14 @@ import {
 } from '../../services/worker';
 import type { RootStackParamList } from '../../navigation/types';
 import UserAvatar from '../../components/UserAvatar';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function WorkerDashboardScreen() {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { clearRole, markWorkerOnboarded } = useApp();
+  const insets = useSafeAreaInsets();
   const [profile, setProfile] = useState<WorkerProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -120,7 +122,7 @@ export default function WorkerDashboardScreen() {
   return (
     <ScrollView
       style={{ backgroundColor: colors.background }}
-      contentContainerStyle={styles.content}
+      contentContainerStyle={[styles.content, { paddingTop: insets.top + 18, paddingBottom: insets.bottom + 28 }]}
     >
       <View style={styles.head}>
         <UserAvatar uri={profile?.photoURL} size={88} />
@@ -308,6 +310,11 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     width: '100%',
     borderWidth: 1,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
   },
   availabilityLabel: {
     fontSize: 16,
@@ -328,6 +335,11 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     alignItems: 'center',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
   },
   emptyIcon: {
     fontSize: 28,
@@ -341,6 +353,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 16,
     padding: 16,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
   },
   infoRow: {
     flexDirection: 'row',

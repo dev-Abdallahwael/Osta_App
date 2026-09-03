@@ -314,6 +314,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 24,
     borderRadius: 16,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
   },
   name: {
     fontSize: 22,
@@ -334,6 +339,11 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 16,
     marginTop: 16,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.04,
+    shadowRadius: 10,
+    elevation: 1,
   },
   sectionTitle: {
     fontSize: 16,
