@@ -239,7 +239,10 @@
     "empty": "No workers are available for this category right now.",
     "currencyPerHour": "EGP/hour",
     "priceNego": "Price negotiable",
-    "noRating": "No ratings yet"
+    "noRating": "No ratings yet",
+    "coverage": "Coverage",
+    "coverageRadius": "up to {{radius}} km",
+    "coverageWholeCity": "whole city"
   },
   "workerProfile": {
     "notFound": "Profile not found",

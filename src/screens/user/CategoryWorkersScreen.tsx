@@ -180,6 +180,9 @@ function WorkerCard({ hit, onPress }: { hit: WorkerSearchHit; onPress: () => voi
     hit.distanceKm >= 0
       ? `${hit.distanceKm < 1 ? (hit.distanceKm * 1000).toFixed(0) + ' m' : hit.distanceKm.toFixed(1) + ' km'}`
       : '';
+  const coverageText = hit.coversWholeCity
+    ? t('categoryWorkers.coverageWholeCity')
+    : t('categoryWorkers.coverageRadius', { radius: hit.radiusKm });
 
   return (
     <Pressable
@@ -209,6 +212,9 @@ function WorkerCard({ hit, onPress }: { hit: WorkerSearchHit; onPress: () => voi
             📍 {distanceText}
           </Text>
         ) : null}
+        <Text style={[styles.distance, { color: colors.textSecondary }]}> 
+          {t('categoryWorkers.coverage')}: {coverageText}
+        </Text>
       </View>
     </Pressable>
   );

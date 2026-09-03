@@ -239,7 +239,10 @@
     "empty": "لا يوجد عمال متاحون لهذه الفئة حالياً.",
     "currencyPerHour": "ج.م/ساعة",
     "priceNego": "السعر قابل للتفاوض",
-    "noRating": "لا تقييمات بعد"
+    "noRating": "لا تقييمات بعد",
+    "coverage": "نطاق التغطية",
+    "coverageRadius": "حتى {{radius}} كم",
+    "coverageWholeCity": "كامل المدينة"
   },
   "workerProfile": {
     "notFound": "الملف غير موجود",

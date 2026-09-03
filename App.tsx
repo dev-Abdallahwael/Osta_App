@@ -35,7 +35,9 @@ function Root() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <StatusBar style="auto" />
-      <AppNavigator key={role ?? 'none'} />
+      <AppNavigator
+        key={`${role ?? 'none'}:${workerOnboarded}:${userOnboarded}`}
+      />
     </View>
   );
 }

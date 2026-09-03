@@ -207,7 +207,7 @@ export default function WorkerProfileScreen({ route }: Props) {
           {dayEntries.map((e) => (
             <View key={e.day} style={styles.dayRow}>
               <Text style={[styles.dayName, { color: colors.textPrimary }]}>
-                {t(`workerOnboarding.hours.days.${e.day}`)}
+                {t(`workerOnboarding.days.${e.day}`)}
               </Text>
               <Text style={[styles.dayTime, { color: colors.textSecondary }]}>
                 {to12h(e.start)} – {to12h(e.end)}

@@ -9,13 +9,20 @@ import { auth, hasConfig } from './firebase';
 
 export type AuthListener = (user: User | null) => void;
 
-export function ensureAnonymousSignIn(): void {
+export async function ensureAnonymousSignIn(): Promise<User | null> {
   if (!hasConfig || !auth) {
-    return;
+    return null;
   }
-  signInAnonymously(auth).catch((err) => {
+  if (auth.currentUser) {
+    return auth.currentUser;
+  }
+  try {
+    const cred = await signInAnonymously(auth);
+    return cred.user;
+  } catch (err) {
     console.warn('Anonymous sign-in failed:', err);
-  });
+    return null;
+  }
 }
 
 export function onAuthChange(listener: AuthListener): () => void {

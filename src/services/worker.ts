@@ -15,7 +15,7 @@ import {
   getDownloadURL,
 } from 'firebase/storage';
 import { db, storage, hasConfig } from './firebase';
-import { getCurrentUserId } from './auth';
+import { ensureAnonymousSignIn } from './auth';
 import type { WorkerOnboardingData } from '../context/WorkerOnboardingContext';
 import type { Category } from '../data/categories';
 
@@ -45,7 +45,8 @@ export async function submitWorkerProfile(
     throw new Error('Firebase not configured');
   }
 
-  const uid = getCurrentUserId();
+  const user = await ensureAnonymousSignIn();
+  const uid = user?.uid;
   if (!uid) {
     throw new Error('No signed-in user');
   }
