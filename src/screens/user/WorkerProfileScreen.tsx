@@ -34,29 +34,53 @@ export default function WorkerProfileScreen({ route }: Props) {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [visibleCount, setVisibleCount] = useState(REVIEWS_PER_PAGE);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [attempt, setAttempt] = useState(0);
   const [chatting, setChatting] = useState(false);
 
   useEffect(() => {
     let mounted = true;
+    setLoading(true);
+    setError(false);
     (async () => {
-      const p = await getWorkerProfile(route.params.workerId);
-      const r = await getWorkerReviews(route.params.workerId);
-      if (mounted) {
-        setWorker(p);
-        setReviews(r);
-        setVisibleCount(REVIEWS_PER_PAGE);
+      try {
+        const p = await getWorkerProfile(route.params.workerId);
+        const r = await getWorkerReviews(route.params.workerId);
+        if (mounted) {
+          setWorker(p);
+          setReviews(r);
+          setVisibleCount(REVIEWS_PER_PAGE);
+        }
+      } catch {
+        if (mounted) setError(true);
       }
       if (mounted) setLoading(false);
     })();
     return () => {
       mounted = false;
     };
-  }, [route.params.workerId]);
+  }, [route.params.workerId, attempt]);
 
   if (loading) {
     return (
       <View style={[styles.center, { backgroundColor: colors.background }]}>
         <ActivityIndicator color={colors.accent} />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={[styles.center, { backgroundColor: colors.background, padding: 24 }]}>
+        <Text style={{ color: colors.textSecondary, textAlign: 'center', marginBottom: 14 }}>
+          {t('common.error')}
+        </Text>
+        <Pressable
+          style={[styles.retryBtn, { backgroundColor: colors.accent }]}
+          onPress={() => setAttempt((a) => a + 1)}
+        >
+          <Text style={styles.retryText}>{t('common.retry')}</Text>
+        </Pressable>
       </View>
     );
   }
@@ -270,6 +294,17 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  retryBtn: {
+    paddingVertical: 11,
+    paddingHorizontal: 22,
+    borderRadius: 22,
+    alignItems: 'center',
+  },
+  retryText: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontWeight: '600',
   },
   container: {
     padding: 16,

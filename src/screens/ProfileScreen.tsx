@@ -16,39 +16,50 @@ export default function ProfileScreen() {
   const [phone, setPhone] = useState('');
   const [photo, setPhoto] = useState('');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     let mounted = true;
+    setLoading(true);
+    setError(false);
     (async () => {
       const uid = getCurrentUserId();
       if (!uid) {
         if (mounted) setLoading(false);
         return;
       }
-      let profileName = '';
-      let profilePhone = '';
-      let profilePhoto = '';
-      if (role === 'worker') {
-        const p = await getWorkerProfile(uid);
-        profileName = p?.name ?? '';
-        profilePhone = p?.phone ?? '';
-        profilePhoto = p?.photoURL ?? '';
-      } else {
-        const p = await getUserProfile(uid);
-        profileName = p?.name ?? '';
-        profilePhone = p?.phone ?? '';
-      }
-      if (mounted) {
-        setName(profileName);
-        setPhone(profilePhone);
-        setPhoto(profilePhoto);
-        setLoading(false);
+      try {
+        let profileName = '';
+        let profilePhone = '';
+        let profilePhoto = '';
+        if (role === 'worker') {
+          const p = await getWorkerProfile(uid);
+          profileName = p?.name ?? '';
+          profilePhone = p?.phone ?? '';
+          profilePhoto = p?.photoURL ?? '';
+        } else {
+          const p = await getUserProfile(uid);
+          profileName = p?.name ?? '';
+          profilePhone = p?.phone ?? '';
+        }
+        if (mounted) {
+          setName(profileName);
+          setPhone(profilePhone);
+          setPhoto(profilePhoto);
+          setLoading(false);
+        }
+      } catch {
+        if (mounted) {
+          setError(true);
+          setLoading(false);
+        }
       }
     })();
     return () => {
       mounted = false;
     };
-  }, [role]);
+  }, [role, attempt]);
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -56,6 +67,18 @@ export default function ProfileScreen() {
 
       {loading ? (
         <ActivityIndicator color={colors.accent} style={{ marginTop: 40 }} />
+      ) : error ? (
+        <View style={styles.card}>
+          <Text style={{ color: colors.textSecondary, textAlign: 'center', marginBottom: 12 }}>
+            {t('common.error')}
+          </Text>
+          <Pressable
+            style={[styles.retryBtn, { backgroundColor: colors.accent }]}
+            onPress={() => setAttempt((a) => a + 1)}
+          >
+            <Text style={styles.retryText}>{t('common.retry')}</Text>
+          </Pressable>
+        </View>
       ) : (
         <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
           <UserAvatar uri={photo} size={80} />
@@ -119,6 +142,19 @@ const styles = StyleSheet.create({
   phone: {
     fontSize: 15,
     marginTop: 10,
+  },
+  retryBtn: {
+    marginTop: 8,
+    paddingVertical: 11,
+    paddingHorizontal: 22,
+    borderRadius: 22,
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
+  retryText: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontWeight: '600',
   },
   backBtn: {
     marginTop: 28,

@@ -30,13 +30,20 @@ export default function WorkerDashboardScreen() {
   const { clearRole, markWorkerOnboarded } = useApp();
   const [profile, setProfile] = useState<WorkerProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [attempt, setAttempt] = useState(0);
   const [toggling, setToggling] = useState(false);
 
   const loadProfile = useCallback(async (onDone?: () => void) => {
     const uid = getCurrentUserId();
     if (uid) {
-      const p = await getWorkerProfile(uid);
-      setProfile(p);
+      try {
+        const p = await getWorkerProfile(uid);
+        setProfile(p);
+        setError(false);
+      } catch {
+        setError(true);
+      }
     } else {
       markWorkerOnboarded();
     }
@@ -51,7 +58,7 @@ export default function WorkerDashboardScreen() {
     return () => {
       mounted = false;
     };
-  }, [loadProfile]);
+  }, [loadProfile, attempt]);
 
   useFocusEffect(
     useCallback(() => {
@@ -87,6 +94,25 @@ export default function WorkerDashboardScreen() {
     return (
       <View style={[styles.center, { backgroundColor: colors.background }]}>
         <ActivityIndicator color={colors.accent} />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={[styles.center, { backgroundColor: colors.background, padding: 24 }]}>
+        <Text style={{ color: colors.textSecondary, textAlign: 'center', marginBottom: 14 }}>
+          {t('common.error')}
+        </Text>
+        <Pressable
+          style={[styles.retryBtn, { backgroundColor: colors.accent }]}
+          onPress={() => {
+            setLoading(true);
+            setAttempt((a) => a + 1);
+          }}
+        >
+          <Text style={styles.retryText}>{t('common.retry')}</Text>
+        </Pressable>
       </View>
     );
   }
@@ -241,6 +267,17 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  retryBtn: {
+    paddingVertical: 11,
+    paddingHorizontal: 22,
+    borderRadius: 22,
+    alignItems: 'center',
+  },
+  retryText: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontWeight: '600',
   },
   content: {
     padding: 20,

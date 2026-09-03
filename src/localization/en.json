@@ -325,5 +325,9 @@
     "failTitle": "Couldn't send report",
     "failBody": "An error occurred while sending your report. Please try again."
   },
+  "common": {
+    "error": "Something went wrong. Please try again.",
+    "retry": "Retry"
+  },
   "switchAccount": "Switch account"
 }

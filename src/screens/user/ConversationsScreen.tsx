@@ -41,6 +41,8 @@ export default function ConversationsScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [attempt, setAttempt] = useState(0);
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: t('chat.conversations') });
@@ -53,6 +55,8 @@ export default function ConversationsScreen() {
       return;
     }
     let mounted = true;
+    setLoading(true);
+    setError(false);
     const resolveNames = async (chats: ChatSummary[]): Promise<Row[]> => {
       return Promise.all(
         chats.map(async (c) => {
@@ -75,27 +79,49 @@ export default function ConversationsScreen() {
     const unsub = subscribeToChats(
       me,
       (chats) => {
-        resolveNames(chats).then((resolved) => {
-          if (mounted) {
-            setRows(resolved);
-            setLoading(false);
-          }
-        });
+        resolveNames(chats)
+          .then((resolved) => {
+            if (mounted) {
+              setRows(resolved);
+              setLoading(false);
+            }
+          })
+          .catch(() => {
+            if (mounted) {
+              setError(true);
+              setLoading(false);
+            }
+          });
       },
       () => {
-        if (mounted) setLoading(false);
+        if (mounted) {
+          setError(true);
+          setLoading(false);
+        }
       },
     );
     return () => {
       mounted = false;
       unsub();
     };
-  }, [role]);
+  }, [role, attempt]);
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       {loading ? (
         <ActivityIndicator color={colors.accent} style={{ marginTop: 40 }} />
+      ) : error ? (
+        <View style={styles.empty}>
+          <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
+            {t('common.error')}
+          </Text>
+          <Pressable
+            style={[styles.retryBtn, { backgroundColor: colors.accent }]}
+            onPress={() => setAttempt((a) => a + 1)}
+          >
+            <Text style={styles.retryText}>{t('common.retry')}</Text>
+          </Pressable>
+        </View>
       ) : rows.length === 0 ? (
         <View style={styles.empty}>
           <Text style={styles.emptyIcon}>💬</Text>
@@ -168,6 +194,19 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 15,
+    textAlign: 'center',
+  },
+  retryBtn: {
+    marginTop: 14,
+    paddingVertical: 11,
+    paddingHorizontal: 22,
+    borderRadius: 22,
+    alignItems: 'center',
+  },
+  retryText: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontWeight: '600',
   },
   row: {
     flexDirection: 'row',

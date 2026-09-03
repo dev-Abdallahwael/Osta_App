@@ -35,10 +35,14 @@ export default function ChatThreadScreen({ route }: Props) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [draft, setDraft] = useState('');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [attempt, setAttempt] = useState(0);
   const [promptDismissed, setPromptDismissed] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
 
   useEffect(() => {
+    setLoading(true);
+    setError(false);
     const unsub = subscribeToChat(
       route.params.chatId,
       (msgs) => {
@@ -46,11 +50,12 @@ export default function ChatThreadScreen({ route }: Props) {
         setLoading(false);
       },
       () => {
+        setError(true);
         setLoading(false);
       },
     );
     return unsub;
-  }, [route.params.chatId]);
+  }, [route.params.chatId, attempt]);
 
   const lastActivity = messages.length
     ? Math.max(...messages.map((m) => m.createdAt))
@@ -135,6 +140,18 @@ export default function ChatThreadScreen({ route }: Props) {
 
       {loading ? (
         <ActivityIndicator color={colors.accent} style={{ marginTop: 30 }} />
+      ) : error ? (
+        <View style={styles.errorWrap}>
+          <Text style={{ color: colors.textSecondary, textAlign: 'center', marginBottom: 12 }}>
+            {t('common.error')}
+          </Text>
+          <Pressable
+            style={[styles.retryBtn, { backgroundColor: colors.accent }]}
+            onPress={() => setAttempt((a) => a + 1)}
+          >
+            <Text style={styles.retryText}>{t('common.retry')}</Text>
+          </Pressable>
+        </View>
       ) : (
         <ScrollView
           ref={scrollRef}
@@ -231,6 +248,23 @@ const styles = StyleSheet.create({
   },
   reportText: {
     fontSize: 13,
+    fontWeight: '600',
+  },
+  errorWrap: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 24,
+  },
+  retryBtn: {
+    paddingVertical: 11,
+    paddingHorizontal: 22,
+    borderRadius: 22,
+    alignItems: 'center',
+  },
+  retryText: {
+    color: '#ffffff',
+    fontSize: 14,
     fontWeight: '600',
   },
   thread: {
