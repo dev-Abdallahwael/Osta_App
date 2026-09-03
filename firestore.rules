@@ -20,7 +20,12 @@ service cloud.firestore {
     match /workers/{workerId} {
       allow read: if true;
       allow create: if signedIn() && request.auth.uid == workerId;
-      allow update: if owner(workerId);
+      // Owner can fully update; any signed-in user may only touch the review
+      // aggregate fields (ratingAvg/ratingCount), recomputed in a transaction.
+      allow update: if owner(workerId) || (
+        signedIn() &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['ratingAvg', 'ratingCount'])
+      );
       allow delete: if owner(workerId);
     }
 

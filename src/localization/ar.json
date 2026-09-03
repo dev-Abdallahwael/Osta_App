@@ -263,7 +263,22 @@
     "now": "الآن",
     "minuteAgo": "منذ {{n}} د",
     "hourAgo": "منذ {{n}} س",
-    "dayAgo": "منذ {{n}} يوم"
+    "dayAgo": "منذ {{n}} يوم",
+    "reviewPrompt": "قيّم تجربتك مع {{name}}",
+    "rateNow": "قيّم الآن"
+  },
+  "review": {
+    "title": "تقييم الخدمة",
+    "forWorker": "قيّم تجربتك مع {{name}}",
+    "inputPlaceholder": "اكتب رأيك (اختياري)...",
+    "submit": "إرسال التقييم",
+    "successTitle": "تم الإرسال",
+    "successBody": "شكرًا لك! تم حفظ تقييمك.",
+    "ok": "حسنًا",
+    "errorTitle": "تعذّر الإرسال",
+    "errorBody": "حدث خطأ أثناء حفظ التقييم. حاول مرة أخرى.",
+    "alreadyTitle": "قمت بالتقييم مسبقًا",
+    "alreadyBody": "يمكنك تقديم تقييم واحد لكل عامل."
   },
   "tabs": {
     "home": "الرئيسية",

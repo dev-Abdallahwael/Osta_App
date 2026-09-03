@@ -11,6 +11,7 @@ import CategoryWorkersScreen from '../screens/user/CategoryWorkersScreen';
 import WorkerProfileScreen from '../screens/user/WorkerProfileScreen';
 import ChatThreadScreen from '../screens/user/ChatThreadScreen';
 import ConversationsScreen from '../screens/user/ConversationsScreen';
+import ReviewScreen from '../screens/user/ReviewScreen';
 import WorkerDashboardScreen from '../screens/worker/WorkerDashboardScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import SettingsScreen from '../screens/SettingsScreen';
@@ -60,6 +61,11 @@ function HomeStackNavigator() {
       <HomeStack.Screen
         name="Conversations"
         component={ConversationsScreen}
+        options={{ headerShown: true, title: '' }}
+      />
+      <HomeStack.Screen
+        name="Review"
+        component={ReviewScreen}
         options={{ headerShown: true, title: '' }}
       />
     </HomeStack.Navigator>

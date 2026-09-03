@@ -263,7 +263,22 @@
     "now": "now",
     "minuteAgo": "{{n}}m ago",
     "hourAgo": "{{n}}h ago",
-    "dayAgo": "{{n}}d ago"
+    "dayAgo": "{{n}}d ago",
+    "reviewPrompt": "Rate your experience with {{name}}",
+    "rateNow": "Rate now"
+  },
+  "review": {
+    "title": "Rate the service",
+    "forWorker": "Rate your experience with {{name}}",
+    "inputPlaceholder": "Write your feedback (optional)...",
+    "submit": "Submit review",
+    "successTitle": "Submitted",
+    "successBody": "Thank you! Your review has been saved.",
+    "ok": "OK",
+    "errorTitle": "Couldn't submit",
+    "errorBody": "An error occurred while saving your review. Please try again.",
+    "alreadyTitle": "Already reviewed",
+    "alreadyBody": "You can submit one review per worker."
   },
   "tabs": {
     "home": "Home",

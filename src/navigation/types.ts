@@ -22,6 +22,7 @@ export type HomeStackParamList = {
   WorkerProfile: { workerId: string };
   Chat: { chatId: string; otherId: string; otherName?: string };
   Conversations: undefined;
+  Review: { workerId: string; workerName?: string };
 };
 
 export type WorkerOnboardingParamList = {
