@@ -22,7 +22,8 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "react-native-google-mobile-ads"
+      "react-native-google-mobile-ads",
+      "expo-notifications"
     ]
   }
 }
