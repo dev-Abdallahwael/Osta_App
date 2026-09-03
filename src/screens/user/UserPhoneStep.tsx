@@ -20,7 +20,7 @@ export default function UserPhoneStep() {
   return (
     <UserOnboardingLayout
       step={1}
-      total={2}
+      total={3}
       canContinue={data.phone.trim().length > 0}
     >
       <Text style={[styles.title, { color: colors.textPrimary }]}>

@@ -101,6 +101,14 @@
       "add": "Enable",
       "remove": "Disable"
     },
+    "account": {
+      "title": "Create your account",
+      "hint": "Use these details to log in later",
+      "emailPlaceholder": "Email ending in .com",
+      "passwordPlaceholder": "Password",
+      "confirmPasswordPlaceholder": "Confirm password",
+      "validation": "Use a valid .com email, a password of at least 6 characters, and matching passwords."
+    },
     "review": {
       "title": "Review your request",
       "hint": "Check your details before saving",

@@ -25,6 +25,7 @@ const STEP_NAMES = [
   'PriceStep',
   'LocationStep',
   'HoursStep',
+  'AccountStep',
   'ReviewStep',
 ] as const;
 

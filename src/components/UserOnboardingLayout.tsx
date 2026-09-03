@@ -16,7 +16,7 @@ import type { UserOnboardingParamList } from '../navigation/types';
 
 type Nav = NativeStackNavigationProp<UserOnboardingParamList>;
 
-const STEP_NAMES = ['UserPhoneStep', 'UserDetailsStep'] as const;
+const STEP_NAMES = ['UserPhoneStep', 'UserDetailsStep', 'AccountStep'] as const;
 
 interface Props {
   step: number;

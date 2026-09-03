@@ -14,6 +14,7 @@ import CategoriesStep from '../screens/worker/CategoriesStep';
 import PriceStep from '../screens/worker/PriceStep';
 import LocationStep from '../screens/worker/LocationStep';
 import HoursStep from '../screens/worker/HoursStep';
+import AccountStep from '../screens/worker/AccountStep';
 import ReviewStep from '../screens/worker/ReviewStep';
 
 const Stack = createNativeStackNavigator<WorkerOnboardingParamList>();
@@ -43,6 +44,9 @@ function toOnboardingData(
 
   return {
     phone: p.phone.replace(/^\+20/, ''),
+    email: '',
+    password: '',
+    confirmPassword: '',
     name: p.name,
     photoUri: p.photoURL || null,
     bio: p.bio,
@@ -96,6 +100,7 @@ function Hydrator({ edit }: { edit: boolean }) {
       <Stack.Screen name="PriceStep" component={PriceStep} />
       <Stack.Screen name="LocationStep" component={LocationStep} />
       <Stack.Screen name="HoursStep" component={HoursStep} />
+      <Stack.Screen name="AccountStep" component={AccountStep} />
       <Stack.Screen name="ReviewStep" component={ReviewStep} />
     </Stack.Navigator>
   );

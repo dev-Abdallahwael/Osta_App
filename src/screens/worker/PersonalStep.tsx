@@ -26,7 +26,7 @@ export default function PersonalStep() {
   }
 
   return (
-    <OnboardingLayout step={2} total={7} canContinue={data.name.trim().length > 0}>
+    <OnboardingLayout step={2} total={8} canContinue={data.name.trim().length > 0}>
       <Text style={[styles.title, { color: colors.textPrimary }]}>
         {t('workerOnboarding.personal.title')}
       </Text>

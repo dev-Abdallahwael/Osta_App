@@ -29,7 +29,7 @@ export default function PriceStep() {
     data.selectedCategories.every((c) => priceFor(c.id).trim().length > 0);
 
   return (
-    <OnboardingLayout step={4} total={7} canContinue={allHavePrice} scroll={false}>
+    <OnboardingLayout step={4} total={8} canContinue={allHavePrice} scroll={false}>
       <StepHeader
         title={t('workerOnboarding.price.title')}
         hint={t('workerOnboarding.price.hint')}

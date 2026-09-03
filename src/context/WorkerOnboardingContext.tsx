@@ -35,6 +35,9 @@ export interface LocationData {
 
 export interface WorkerOnboardingData {
   phone: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
   name: string;
   photoUri: string | null;
   bio: string;
@@ -61,6 +64,9 @@ const DEFAULT_AVAILABLE_DAYS: DayKey[] = ['sat', 'sun', 'mon', 'tue', 'wed', 'th
 
 const DEFAULT_DATA: WorkerOnboardingData = {
   phone: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
   name: '',
   photoUri: null,
   bio: '',

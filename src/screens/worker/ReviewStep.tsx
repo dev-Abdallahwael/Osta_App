@@ -6,6 +6,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useWorkerOnboarding } from '../../context/WorkerOnboardingContext';
 import { useApp } from '../../context/AppContext';
 import { submitWorkerProfile } from '../../services/worker';
+import { createAccount } from '../../services/auth';
 import UserAvatar from '../../components/UserAvatar';
 import OnboardingLayout, { StepHeader } from '../../components/OnboardingLayout';
 
@@ -34,6 +35,7 @@ export default function ReviewStep() {
     if (saving) return;
     setSaving(true);
     try {
+      await createAccount(data.email, data.password);
       await submitWorkerProfile(data, edit);
       reset();
       if (edit) {
@@ -54,7 +56,7 @@ export default function ReviewStep() {
   }
 
   return (
-    <OnboardingLayout step={7} total={7} scroll={false} onFinish={handleFinish} canContinue={!saving}>
+    <OnboardingLayout step={8} total={8} scroll={false} onFinish={handleFinish} canContinue={!saving}>
       <StepHeader
         title={edit ? t('workerOnboarding.review.editTitle') : t('workerOnboarding.review.title')}
         hint={edit ? t('workerOnboarding.review.editHint') : t('workerOnboarding.review.hint')}

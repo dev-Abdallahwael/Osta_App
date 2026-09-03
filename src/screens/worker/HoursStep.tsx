@@ -68,7 +68,7 @@ export default function HoursStep() {
   return (
     <OnboardingLayout
       step={6}
-      total={7}
+      total={8}
       canContinue={data.availableDays.length > 0}
     >
       <StepHeader

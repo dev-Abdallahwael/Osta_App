@@ -12,35 +12,13 @@ import { useTranslation } from 'react-i18next';
 import * as Location from 'expo-location';
 import { useTheme } from '../../context/ThemeContext';
 import { useUserOnboarding } from '../../context/UserOnboardingContext';
-import { useApp } from '../../context/AppContext';
-import { submitUserProfile } from '../../services/user';
 import UserOnboardingLayout from '../../components/UserOnboardingLayout';
 
 export default function UserDetailsStep() {
   const { t } = useTranslation();
   const { colors } = useTheme();
-  const { data, update, reset } = useUserOnboarding();
-  const { markUserOnboarded } = useApp();
+  const { data, update } = useUserOnboarding();
   const [locating, setLocating] = useState(false);
-  const [saving, setSaving] = useState(false);
-
-  async function handleFinish() {
-    if (saving) return;
-    setSaving(true);
-    try {
-      await submitUserProfile(data);
-      reset();
-      await markUserOnboarded();
-    } catch (err) {
-      console.warn('User submit failed:', err);
-      Alert.alert(
-        t('userOnboarding.details.submitErrorTitle'),
-        t('userOnboarding.details.submitErrorBody'),
-      );
-    } finally {
-      setSaving(false);
-    }
-  }
 
   async function detectLocation() {
     if (locating) return;
@@ -88,9 +66,8 @@ export default function UserDetailsStep() {
   return (
     <UserOnboardingLayout
       step={2}
-      total={2}
+      total={3}
       canContinue={data.name.trim().length > 0 && !!data.location}
-      onFinish={handleFinish}
     >
       <Text style={[styles.title, { color: colors.textPrimary }]}>
         {t('userOnboarding.details.title')}

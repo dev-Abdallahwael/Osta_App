@@ -8,12 +8,18 @@ import React, {
 
 export interface UserOnboardingData {
   phone: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
   name: string;
   location: { lat: number; lng: number; address: string; city: string } | null;
 }
 
 const DEFAULT_DATA: UserOnboardingData = {
   phone: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
   name: '',
   location: null,
 };

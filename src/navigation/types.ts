@@ -33,10 +33,12 @@ export type WorkerOnboardingParamList = {
   PriceStep: undefined;
   LocationStep: undefined;
   HoursStep: undefined;
+  AccountStep: undefined;
   ReviewStep: undefined;
 };
 
 export type UserOnboardingParamList = {
   UserPhoneStep: undefined;
   UserDetailsStep: undefined;
+  AccountStep: undefined;
 };

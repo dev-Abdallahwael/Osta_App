@@ -52,7 +52,7 @@ export default function LocationStep() {
   }
 
   return (
-    <OnboardingLayout step={5} total={7} canContinue={data.location !== null}>
+    <OnboardingLayout step={5} total={8} canContinue={data.location !== null}>
       <StepHeader
         title={t('workerOnboarding.location.title')}
         hint={t('workerOnboarding.location.hint')}

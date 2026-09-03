@@ -1,6 +1,8 @@
 import {
   signInAnonymously,
   signInWithEmailAndPassword,
+  EmailAuthProvider,
+  linkWithCredential,
   signOut as fbSignOut,
   onAuthStateChanged,
   type User,
@@ -35,6 +37,21 @@ export function onAuthChange(listener: AuthListener): () => void {
 
 export function getCurrentUserId(): string | null {
   return auth?.currentUser?.uid ?? null;
+}
+
+export async function createAccount(email: string, password: string): Promise<User> {
+  if (!hasConfig || !auth) {
+    throw new Error('Firebase not configured');
+  }
+  const user = await ensureAnonymousSignIn();
+  if (!user) {
+    throw new Error('No signed-in user');
+  }
+  if (!user.isAnonymous) {
+    return user;
+  }
+  const credential = EmailAuthProvider.credential(email.trim(), password);
+  return (await linkWithCredential(user, credential)).user;
 }
 
 export async function signInWithEmailPassword(

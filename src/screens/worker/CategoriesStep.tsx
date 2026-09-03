@@ -26,7 +26,7 @@ export default function CategoriesStep() {
   return (
     <OnboardingLayout
       step={3}
-      total={7}
+      total={8}
       canContinue={data.selectedCategories.length > 0}
       scroll={false}
     >

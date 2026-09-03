@@ -14,7 +14,8 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTheme } from '../context/ThemeContext';
 import { useApp } from '../context/AppContext';
-import { signInWithEmailPassword } from '../services/auth';
+import { getCurrentUserId, signInWithEmailPassword } from '../services/auth';
+import { getWorkerProfile } from '../services/worker';
 import type { RootStackParamList } from '../navigation/types';
 import type { Role } from '../navigation/types';
 
@@ -30,9 +31,11 @@ export default function LoginScreen() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  function roleForEmail(address: string): Role {
-    const normalized = address.trim().toLowerCase();
-    if (normalized === 'worker@test.com') return 'worker';
+  async function roleForSignedInUser(): Promise<Role> {
+    const uid = getCurrentUserId();
+    if (uid && (await getWorkerProfile(uid))) {
+      return 'worker';
+    }
     return 'user';
   }
 
@@ -45,7 +48,7 @@ export default function LoginScreen() {
     setError(null);
     try {
       await signInWithEmailPassword(email.trim(), password);
-      const role = roleForEmail(email);
+      const role = await roleForSignedInUser();
       await completeOnboarding(role);
     } catch (err) {
       console.warn('Login failed:', err);
