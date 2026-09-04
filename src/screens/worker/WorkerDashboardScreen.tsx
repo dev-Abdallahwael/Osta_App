@@ -10,7 +10,11 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import {
+  useNavigation,
+  useFocusEffect,
+  type CompositeNavigationProp,
+} from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTheme } from '../../context/ThemeContext';
 import { useApp } from '../../context/AppContext';
@@ -20,14 +24,39 @@ import {
   setWorkerAvailability,
   type WorkerProfile,
 } from '../../services/worker';
-import type { RootStackParamList } from '../../navigation/types';
+import { subscribeToChats, type ChatSummary } from '../../services/chat';
+import { getUserProfile } from '../../services/user';
+import type { RootStackParamList, HomeStackParamList } from '../../navigation/types';
 import UserAvatar from '../../components/UserAvatar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+type DashboardNavigation = CompositeNavigationProp<
+  NativeStackNavigationProp<HomeStackParamList>,
+  NativeStackNavigationProp<RootStackParamList>
+>;
+
+interface ChatRow extends ChatSummary {
+  otherId: string;
+  otherName: string;
+}
+
+function chatRelativeTime(
+  ts: number,
+  t: (k: string, o?: Record<string, unknown>) => string,
+): string {
+  if (!ts) return '';
+  const diffMin = Math.floor((Date.now() - ts) / 60000);
+  if (diffMin < 1) return t('chat.now');
+  if (diffMin < 60) return t('chat.minuteAgo', { n: diffMin });
+  const diffH = Math.floor(diffMin / 60);
+  if (diffH < 24) return t('chat.hourAgo', { n: diffH });
+  return t('chat.dayAgo', { n: Math.floor(diffH / 24) });
+}
 
 export default function WorkerDashboardScreen() {
   const { t } = useTranslation();
   const { colors } = useTheme();
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<DashboardNavigation>();
   const { clearRole, markWorkerOnboarded } = useApp();
   const insets = useSafeAreaInsets();
   const [profile, setProfile] = useState<WorkerProfile | null>(null);
@@ -35,6 +64,7 @@ export default function WorkerDashboardScreen() {
   const [error, setError] = useState(false);
   const [attempt, setAttempt] = useState(0);
   const [toggling, setToggling] = useState(false);
+  const [chats, setChats] = useState<ChatRow[]>([]);
 
   const loadProfile = useCallback(async (onDone?: () => void) => {
     const uid = getCurrentUserId();
@@ -69,6 +99,38 @@ export default function WorkerDashboardScreen() {
       loadProfile();
     }, [loadProfile]),
   );
+
+  useEffect(() => {
+    const me = getCurrentUserId();
+    if (!me) return;
+    let mounted = true;
+    const resolveNames = async (list: ChatSummary[]): Promise<ChatRow[]> => {
+      return Promise.all(
+        list.map(async (c) => {
+          const otherId = c.participantIds.find((p) => p !== me) ?? '';
+          let otherName = '';
+          if (otherId) {
+            const p = await getUserProfile(otherId);
+            otherName = p?.name ?? '—';
+          }
+          return { ...c, otherId, otherName };
+        }),
+      );
+    };
+    const unsub = subscribeToChats(me, (list) => {
+      resolveNames(list)
+        .then((resolved) => {
+          if (mounted) setChats(resolved);
+        })
+        .catch(() => {
+          if (mounted) setChats([]);
+        });
+    });
+    return () => {
+      mounted = false;
+      unsub();
+    };
+  }, []);
 
   const toggleAvailability = useCallback(async () => {
     if (toggling || !profile) return;
@@ -172,18 +234,68 @@ export default function WorkerDashboardScreen() {
       <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>
         {t('workerDashboard.chatsTitle')}
       </Text>
-      <Pressable
-        style={[
-          styles.emptyCard,
-          { backgroundColor: colors.surface, borderColor: colors.border },
-        ]}
-        onPress={() => navigation.navigate('Conversations' as never)}
-      >
-        <Text style={styles.emptyIcon}>💬</Text>
-        <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-          {t('workerDashboard.chatsEmpty')}
-        </Text>
-      </Pressable>
+      {chats.length > 0 ? (
+        <View
+          style={[
+            styles.chatsCard,
+            { backgroundColor: colors.surface, borderColor: colors.border },
+          ]}
+        >
+          {chats.map((c, idx) => (
+            <Pressable
+              key={c.chatId}
+              onPress={() =>
+                navigation.navigate('Chat', {
+                  chatId: c.chatId,
+                  otherId: c.otherId,
+                  otherName: c.otherName,
+                })
+              }
+              style={[styles.chatRow, idx > 0 && { borderTopColor: colors.border, borderTopWidth: 1 }]}
+            >
+              <View style={[styles.chatAvatar, { backgroundColor: colors.background }]}>
+                <Text style={styles.chatAvatarText}>👤</Text>
+              </View>
+              <View style={styles.chatBody}>
+                <View style={styles.chatNameRow}>
+                  <Text
+                    style={[styles.chatName, { color: colors.textPrimary }]}
+                    numberOfLines={1}
+                  >
+                    {c.otherName}
+                  </Text>
+                  {c.lastMessageAt ? (
+                    <Text style={[styles.chatTime, { color: colors.textSecondary }]}>
+                      {chatRelativeTime(c.lastMessageAt, t)}
+                    </Text>
+                  ) : null}
+                </View>
+                {c.lastMessage ? (
+                  <Text
+                    style={[styles.chatPreview, { color: colors.textSecondary }]}
+                    numberOfLines={1}
+                  >
+                    {c.lastMessage}
+                  </Text>
+                ) : null}
+              </View>
+            </Pressable>
+          ))}
+        </View>
+      ) : (
+        <Pressable
+          style={[
+            styles.emptyCard,
+            { backgroundColor: colors.surface, borderColor: colors.border },
+          ]}
+          onPress={() => navigation.navigate('Conversations')}
+        >
+          <Text style={styles.emptyIcon}>💬</Text>
+          <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
+            {t('workerDashboard.chatsEmpty')}
+          </Text>
+        </Pressable>
+      )}
 
       <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>
         {t('workerDashboard.profileTitle')}
@@ -340,6 +452,53 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 10,
     elevation: 2,
+  },
+  chatsCard: {
+    borderWidth: 1,
+    borderRadius: 16,
+    paddingHorizontal: 14,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
+  },
+  chatRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+  },
+  chatAvatar: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginEnd: 12,
+  },
+  chatAvatarText: {
+    fontSize: 20,
+  },
+  chatBody: {
+    flex: 1,
+  },
+  chatNameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  chatName: {
+    fontSize: 16,
+    fontWeight: '600',
+    flexShrink: 1,
+  },
+  chatTime: {
+    fontSize: 12,
+    marginStart: 8,
+  },
+  chatPreview: {
+    fontSize: 13,
+    marginTop: 2,
   },
   emptyIcon: {
     fontSize: 28,

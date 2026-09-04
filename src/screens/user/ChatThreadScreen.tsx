@@ -17,6 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTheme } from '../../context/ThemeContext';
 import { useApp } from '../../context/AppContext';
+import { useLanguage } from '../../context/LanguageContext';
 import type { HomeStackParamList } from '../../navigation/types';
 import { getCurrentUserId } from '../../services/auth';
 import { sendMessage, subscribeToChat, type ChatMessage } from '../../services/chat';
@@ -30,6 +31,7 @@ export default function ChatThreadScreen({ route }: Props) {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const { role } = useApp();
+  const { language } = useLanguage();
   const navigation = useNavigation<NativeStackNavigationProp<HomeStackParamList>>();
   const me = getCurrentUserId();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -160,10 +162,13 @@ export default function ChatThreadScreen({ route }: Props) {
         >
           {messages.map((m) => {
             const mine = m.senderId === me;
+            // Align deterministically so "mine" and "other" always sit on
+            // opposite sides regardless of RTL mirroring.
+            const rowStyle = language === 'ar' ? (mine ? styles.rowStart : styles.rowEnd) : (mine ? styles.rowEnd : styles.rowStart);
             return (
               <View
                 key={m.id}
-                style={[styles.bubbleRow, mine ? styles.rowMine : styles.rowOther]}
+                style={[styles.bubbleRow, rowStyle]}
               >
                 <View
                   style={[
@@ -280,6 +285,12 @@ const styles = StyleSheet.create({
   },
   rowOther: {
     justifyContent: 'flex-start',
+  },
+  rowStart: {
+    justifyContent: 'flex-start',
+  },
+  rowEnd: {
+    justifyContent: 'flex-end',
   },
   bubble: {
     maxWidth: '78%',
