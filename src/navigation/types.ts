@@ -3,6 +3,7 @@ import type { NavigatorScreenParams } from '@react-navigation/native';
 export type Role = 'worker' | 'user';
 
 export type RootStackParamList = {
+  LanguageSelect: undefined;
   RoleSelect: undefined;
   Login: undefined;
   Main: NavigatorScreenParams<MainTabParamList> | undefined;

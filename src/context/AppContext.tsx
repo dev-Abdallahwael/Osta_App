@@ -12,16 +12,19 @@ import type { Role } from '../navigation/types';
 const ROLE_KEY = '@osta/role';
 const WORKER_ONBOARDED_KEY = '@osta/workerOnboarded';
 const USER_ONBOARDED_KEY = '@osta/userOnboarded';
+const LANGUAGE_SELECTED_KEY = '@osta/languageSelected';
 
 interface AppContextValue {
   role: Role | null;
   workerOnboarded: boolean;
   userOnboarded: boolean;
+  languageSelected: boolean;
   isBooting: boolean;
   completeOnboarding: (role: Role) => Promise<void>;
   switchRole: (role: Role) => Promise<void>;
   markWorkerOnboarded: () => Promise<void>;
   markUserOnboarded: () => Promise<void>;
+  markLanguageSelected: () => Promise<void>;
   clearRole: () => Promise<void>;
 }
 
@@ -31,21 +34,26 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [role, setRole] = useState<Role | null>(null);
   const [workerOnboarded, setWorkerOnboarded] = useState(false);
   const [userOnboarded, setUserOnboarded] = useState(false);
+  const [languageSelected, setLanguageSelected] = useState(false);
   const [isBooting, setIsBooting] = useState(true);
 
   useEffect(() => {
     let mounted = true;
     (async () => {
       try {
-        const [wOnboarded, uOnboarded] = await Promise.all([
+        const [wOnboarded, uOnboarded, langSelected] = await Promise.all([
           AsyncStorage.getItem(WORKER_ONBOARDED_KEY),
           AsyncStorage.getItem(USER_ONBOARDED_KEY),
+          AsyncStorage.getItem(LANGUAGE_SELECTED_KEY),
         ]);
         if (mounted && wOnboarded === '1') {
           setWorkerOnboarded(true);
         }
         if (mounted && uOnboarded === '1') {
           setUserOnboarded(true);
+        }
+        if (mounted && langSelected === '1') {
+          setLanguageSelected(true);
         }
       } catch (err) {
         console.warn('Failed to load app state:', err);
@@ -87,27 +95,36 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setUserOnboarded(false);
   }, []);
 
+  const markLanguageSelected = useCallback(async () => {
+    await AsyncStorage.setItem(LANGUAGE_SELECTED_KEY, '1');
+    setLanguageSelected(true);
+  }, []);
+
   const value = useMemo<AppContextValue>(
     () => ({
       role,
       workerOnboarded,
       userOnboarded,
+      languageSelected,
       isBooting,
       completeOnboarding,
       switchRole,
       markWorkerOnboarded,
       markUserOnboarded,
+      markLanguageSelected,
       clearRole,
     }),
     [
       role,
       workerOnboarded,
       userOnboarded,
+      languageSelected,
       isBooting,
       completeOnboarding,
       switchRole,
       markWorkerOnboarded,
       markUserOnboarded,
+      markLanguageSelected,
       clearRole,
     ],
   );

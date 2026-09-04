@@ -208,6 +208,10 @@
       "arabic": "العربية"
     }
   },
+  "languageSelect": {
+    "title": "اختر لغتك",
+    "subtitle": "يمكنك تغييرها لاحقًا من الإعدادات"
+  },
   "userOnboarding": {
     "finish": "إنهاء",
     "phone": {

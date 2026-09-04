@@ -208,6 +208,10 @@
       "arabic": "Arabic"
     }
   },
+  "languageSelect": {
+    "title": "Choose your language",
+    "subtitle": "You can change it later in Settings"
+  },
   "userOnboarding": {
     "finish": "Finish",
     "phone": {

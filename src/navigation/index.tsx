@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useApp } from '../context/AppContext';
+import LanguageSelectScreen from '../screens/LanguageSelectScreen';
 import RoleSelectScreen from '../screens/RoleSelectScreen';
 import LoginScreen from '../screens/LoginScreen';
 import MainTabs from './MainTabs';
@@ -22,7 +23,13 @@ function WorkerOnboardingRoute({ route }: WorkerOnboardingProps) {
   return <WorkerOnboardingNavigator edit={route?.params?.edit ?? false} />;
 }
 
-function targetRoute(role: 'worker' | 'user' | null, workerOnboarded: boolean, userOnboarded: boolean) {
+function targetRoute(
+  languageSelected: boolean,
+  role: 'worker' | 'user' | null,
+  workerOnboarded: boolean,
+  userOnboarded: boolean,
+) {
+  if (!languageSelected) return 'LanguageSelect';
   if (!role) return 'RoleSelect';
   if (role === 'worker' && !workerOnboarded) return 'WorkerOnboarding';
   if (role === 'user' && !userOnboarded) return 'UserOnboarding';
@@ -30,8 +37,8 @@ function targetRoute(role: 'worker' | 'user' | null, workerOnboarded: boolean, u
 }
 
 export default function AppNavigator() {
-  const { role, workerOnboarded, userOnboarded, isBooting } = useApp();
-  const initial = targetRoute(role, workerOnboarded, userOnboarded);
+  const { role, workerOnboarded, userOnboarded, languageSelected, isBooting } = useApp();
+  const initial = targetRoute(languageSelected, role, workerOnboarded, userOnboarded);
 
   if (isBooting) {
     return null;
@@ -40,6 +47,11 @@ export default function AppNavigator() {
   return (
     <NavigationContainer>
       <RootStack.Navigator key={initial} initialRouteName={initial}>
+        <RootStack.Screen
+          name="LanguageSelect"
+          component={LanguageSelectScreen}
+          options={{ headerShown: false }}
+        />
         <RootStack.Screen
           name="RoleSelect"
           component={RoleSelectScreen}
